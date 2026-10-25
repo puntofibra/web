@@ -364,8 +364,6 @@ body.ej-lock{overflow:hidden}
 .ej-form{padding:22px;border-radius:var(--r);border:1px solid var(--line);background:rgba(255,255,255,.03)}
 .ej-row{display:flex;gap:12px;flex-wrap:wrap}
 .ej-grow{flex:1;min-width:200px}
-.ej-ico-f{width:90px}
-.ej-ico-f input{text-align:center;font-size:1.3rem!important}
 .ej-checks{display:flex;flex-wrap:wrap;gap:10px 22px}
 .ej-chk{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--txt);cursor:pointer}
 .ej-chk input{width:18px;height:18px;accent-color:var(--g)}
@@ -396,3 +394,18 @@ body.ej-lock{overflow:hidden}
 .ej-link{color:var(--g);text-decoration:underline}
 .ej-secret{word-break:break-all;user-select:all;color:var(--txt)}
 .ej-page .top-actions{margin-left:auto}
+
+/* icono con imagen */
+.ej-img{width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
+.ej-ico,.ej-aico{overflow:hidden}
+.ej-ico:has(.ej-img){padding:0;background:none}
+.ej-aico{height:44px;border-radius:12px}
+.ej-img-sm{width:24px;height:24px;border-radius:7px;display:inline-block;vertical-align:-6px}
+.ej-ico-f{width:96px;display:flex;flex-direction:column;align-items:center}
+.ej-lbl{display:block;font-size:.8rem;color:var(--mut);margin-bottom:6px;font-weight:500;align-self:flex-start}
+.ej-ico-pick{width:84px;height:84px;border-radius:20px;border:1px dashed rgba(125,255,90,.45);background:rgba(0,0,0,.35);overflow:hidden;display:grid;place-items:center;font-size:2rem;transition:.2s;color:var(--g)}
+.ej-ico-pick:hover{border-color:var(--g);box-shadow:0 0 0 4px rgba(125,255,90,.15)}
+.ej-ico-pick #icoPrev{width:100%;height:100%;display:grid;place-items:center}
+.ej-ico-plus{display:grid;place-items:center;line-height:1;font-size:1.6rem}
+.ej-ico-plus small{font-size:.7rem;margin-top:4px;font-family:var(--fb)}
+.ej-ico-del{font-size:.75rem;margin-top:6px}

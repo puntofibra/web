@@ -178,6 +178,16 @@ const jsonp = (params) => new Promise((res, rej) => {
   s.src = API + '?' + new URLSearchParams({ ...params, callback: cb, cnt: Date.now() });
   document.body.appendChild(s);
 });
+const icoHtml = (v, cls = '') => /^data:image\//.test(v || '') ? `<img src="${esc(v)}" alt="" class="ej-img ${cls}">` : esc(v || '✨');
+async function callPost(action, data = {}) {
+  let r;
+  try {
+    const res = await fetch(API, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action, tok: S.token || '', ...data }) });
+    r = await res.json();
+  } catch (e) { throw new Error('Sin conexión'); }
+  if (!r || !r.ok) { if (r && r.sesion === false) salirAdmin(true); throw new Error((r && r.error) || 'Error'); }
+  return r;
+}
 const S = { token: store.get('ej_tok'), lista: [], admin: [] };
 async function call(action, data = {}, admin = false) {
   const p = { action, ...data };
@@ -232,7 +242,7 @@ function pintaLista() {
   $('#ejEmpty').hidden = S.lista.length > 0;
   g.innerHTML = S.lista.map((x, i) => `
     <article class="card ej-card tilt reveal" data-sfx-hover data-id="${esc(x.id)}" tabindex="0" role="button" aria-label="Ver ${esc(x.titulo)}">
-      <div class="ej-ico">${esc(x.icono || '✨')}</div>
+      <div class="ej-ico">${icoHtml(x.icono)}</div>
       <h3>${esc(x.titulo)}</h3>
       <p>${esc(x.desc).replace(/\n/g, '<br>')}</p>
       <div class="ej-foot">
@@ -266,7 +276,7 @@ function verEjemplo(id, desdeHash) {
   if (!x) return;
   if (!x.encapsulado) { window.open(x.url, '_blank', 'noopener'); return; }
   abierto = id;
-  $('#vTitle').textContent = (x.icono ? x.icono + ' ' : '') + x.titulo;
+  $('#vTitle').innerHTML = (x.icono ? icoHtml(x.icono, 'ej-img-sm') + ' ' : '') + esc(x.titulo);
   $('#vOpen').href = x.url;
   $('#vLoad').classList.remove('done');
   frame.src = x.url;
@@ -398,7 +408,7 @@ function pintaAdmin() {
   if (!S.admin.length) { l.innerHTML = '<p class="ej-mut">Aún no hay ejemplos. Añade el primero arriba.</p>'; return; }
   l.innerHTML = S.admin.map((x, i) => `
     <div class="ej-arow${x.activo ? '' : ' off'}" data-id="${esc(x.id)}">
-      <div class="ej-aico">${esc(x.icono || '✨')}</div>
+      <div class="ej-aico">${icoHtml(x.icono)}</div>
       <div class="ej-ainfo"><b>${esc(x.titulo)}</b>${x.activo ? '' : ' <em>oculto</em>'}${x.encapsulado ? '' : ' <em>pestaña nueva</em>'}<small>${esc(x.url)}</small></div>
       <div class="ej-abtns">
         <button data-a="up" title="Subir" ${i === 0 ? 'disabled' : ''}>↑</button>
@@ -413,7 +423,7 @@ $('#aList').addEventListener('click', async e => {
   const b = e.target.closest('button[data-a]'); if (!b) return;
   const id = b.closest('.ej-arow').dataset.id, x = S.admin.find(r => r.id === id), a = b.dataset.a;
   if (a === 'edit') {
-    form.id.value = x.id; form.titulo.value = x.titulo; form.url.value = x.url; form.desc.value = x.desc; form.icono.value = x.icono;
+    form.id.value = x.id; form.titulo.value = x.titulo; form.url.value = x.url; form.desc.value = x.desc; form.icono.value = x.icono; pintaIcoForm();
     form.encapsulado.checked = x.encapsulado; form.activo.checked = x.activo;
     $('#fSave').firstElementChild.textContent = 'Guardar cambios'; $('#fCancel').hidden = false;
     panel.scrollTo({ top: 0, behavior: 'smooth' }); form.titulo.focus(); return;
@@ -427,15 +437,56 @@ $('#aList').addEventListener('click', async e => {
     await cargaAdmin();
   } catch (er) { toast(er.message); b.disabled = false; }
 });
-function resetForm() { form.reset(); form.id.value = ''; $('#fSave').firstElementChild.textContent = 'Añadir ejemplo'; $('#fCancel').hidden = true; }
+function resetForm() { form.reset(); form.id.value = ''; form.icono.value = ''; pintaIcoForm(); $('#fSave').firstElementChild.textContent = 'Añadir ejemplo'; $('#fCancel').hidden = true; }
 $('#fCancel').addEventListener('click', resetForm);
+
+/* ---------- Icono: elegir imagen ---------- */
+function pintaIcoForm() {
+  const v = form.icono.value;
+  $('#icoPrev').innerHTML = v ? icoHtml(v) : '<span class="ej-ico-plus">＋<small>Imagen</small></span>';
+  $('#icoQuitar').hidden = !v;
+}
+$('#icoPick').addEventListener('click', () => $('#icoFile').click());
+$('#icoQuitar').addEventListener('click', () => { form.icono.value = ''; pintaIcoForm(); });
+$('#icoFile').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = '';
+  if (!f) return;
+  if (!/^image\//.test(f.type)) { toast('Elige una imagen'); return; }
+  try { form.icono.value = await iconoDe(f); pintaIcoForm(); SFX.play('pop'); }
+  catch (er) { toast('No se ha podido leer la imagen'); }
+});
+function iconoDe(file) {
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const N = 256, cv = document.createElement('canvas'); cv.width = cv.height = N;
+      const c = cv.getContext('2d'), s = Math.min(img.width, img.height);
+      c.imageSmoothingQuality = 'high';
+      c.drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, N, N); // recorte cuadrado al centro
+      let d = cv.toDataURL('image/webp', .86);
+      if (!/^data:image\/webp/.test(d) || d.length > 45000) {
+        d = cv.toDataURL('image/png');
+        if (d.length > 45000) { // sin webp y PNG muy pesado: JPG sobre fondo oscuro
+          const c2 = document.createElement('canvas'); c2.width = c2.height = N; const x = c2.getContext('2d');
+          x.fillStyle = '#0b1114'; x.fillRect(0, 0, N, N); x.drawImage(cv, 0, 0);
+          d = c2.toDataURL('image/jpeg', .85);
+        }
+      }
+      res(d);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('img')); };
+    img.src = url;
+  });
+}
+pintaIcoForm();
 form.addEventListener('submit', async e => {
   e.preventDefault();
   const msg = $('#fMsg'), btn = $('#fSave'); msg.className = 'form-msg'; msg.textContent = '';
   let url = form.url.value.trim(); if (url && !/^https?:\/\//i.test(url)) url = 'https://' + url;
   btn.disabled = true;
   try {
-    await call('ejGuardar', { id: form.id.value, titulo: form.titulo.value, url, desc: form.desc.value, icono: form.icono.value,
+    await callPost('ejGuardar', { id: form.id.value, titulo: form.titulo.value, url, desc: form.desc.value, icono: form.icono.value,
       encapsulado: form.encapsulado.checked ? '1' : '0', activo: form.activo.checked ? '1' : '0' }, true);
     SFX.play('success'); toast(form.id.value ? 'Cambios guardados ✅' : 'Ejemplo añadido ✅');
     resetForm(); await cargaAdmin(); cargaLista();

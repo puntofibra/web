@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=7">
+<link rel="stylesheet" href="styles.css?v=8">
 </head>
 <body class="ej-page">
 <canvas id="bg" aria-hidden="true"></canvas>
@@ -104,7 +104,12 @@
     <form id="ejForm" class="lead-form ej-form" autocomplete="off">
       <input type="hidden" name="id">
       <div class="ej-row">
-        <label class="ej-ico-f"><span>Icono</span><input name="icono" maxlength="4" placeholder="🚀"></label>
+        <div class="ej-ico-f"><span class="ej-lbl">Icono</span>
+          <input type="hidden" name="icono">
+          <button type="button" id="icoPick" class="ej-ico-pick" title="Elegir imagen"><span id="icoPrev"></span></button>
+          <button type="button" id="icoQuitar" class="ej-link ej-ico-del" hidden>Quitar</button>
+          <input type="file" id="icoFile" accept="image/*" hidden>
+        </div>
         <label class="ej-grow"><span>Título</span><input name="titulo" maxlength="80" required placeholder="Ej: Citas para peluquerías"></label>
       </div>
       <label><span>Enlace (https://…)</span><input name="url" type="url" required placeholder="https://puntofibra.github.io/…"></label>
@@ -128,6 +133,6 @@
 <div id="toast" class="toast" role="status"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="ejemplos.js?v=1"></script>
+<script src="ejemplos.js?v=2"></script>
 </body>
 </html>
