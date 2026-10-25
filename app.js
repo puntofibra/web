@@ -299,7 +299,19 @@ installBtn.addEventListener('click', async () => {
     return;
   }
   if (isIOS) { $('#iosNotSafari').hidden = isSafari; openModal($('#iosModal')); return; }
-  toast(/android/i.test(ua) ? 'Pulsa ⋮ arriba a la derecha → «Instalar aplicación» o «Añadir a pantalla de inicio»' : 'Usa el menú del navegador → «Instalar aplicación»');
+  if (/android/i.test(ua)) {
+    // Chrome aún no ha dado permiso (pasa tras borrar datos o desinstalar): avisamos cuando lo dé
+    waitingBip = true;
+    toast('Chrome está preparando la instalación. Mira la web unos segundos y vuelve a pulsar «Instalar».', 6000);
+    return;
+  }
+  toast('Usa el menú del navegador → «Instalar aplicación»');
+});
+let waitingBip = false;
+addEventListener('bip-ready', () => {
+  if (!waitingBip) return; waitingBip = false;
+  toast('¡Listo! Pulsa «Instalar» para instalar la app', 5000);
+  installBtn.classList.add('install-ready'); setTimeout(() => installBtn.classList.remove('install-ready'), 6000);
 });
 // En iPhone, mostrar las instrucciones una vez automáticamente
 if (isIOS && !standalone && store.get('fm_ios_tip') !== '1') {
@@ -315,7 +327,7 @@ $('#shareBtn').addEventListener('click', async () => {
 
 /* ---------- Toast ---------- */
 let tt;
-function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 2600); }
+function toast(msg, ms = 2600) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), ms); }
 
 /* ---------- Formulario → Sheet ---------- */
 const jsonp = (url, params) => new Promise((res, rej) => {
