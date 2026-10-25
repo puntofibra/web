@@ -317,3 +317,82 @@ h2{font-family:var(--fh);font-size:clamp(1.9rem,4.4vw,3.3rem);line-height:1.08;l
 .vis-dot{width:8px;height:8px;border-radius:50%;background:var(--g);box-shadow:0 0 8px var(--g);animation:visPulse 1.8s infinite}
 @keyframes visPulse{50%{opacity:.35}}
 .visitas[hidden]{display:none}
+
+/* ===== Botones de la sección Apps ===== */
+.apps-btns{display:flex;flex-wrap:wrap;gap:14px}
+@media (max-width:480px){.apps-btns .btn{flex:1 1 100%}}
+
+/* ===== Página de ejemplos ===== */
+.ej-page .top .brand-fm{opacity:1;transform:none}
+.ej-hero{padding-top:clamp(110px,14vw,150px);min-height:70vh}
+.ej-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.ej-card{cursor:pointer;display:flex;flex-direction:column;outline:0}
+.ej-card:focus-visible{border-color:var(--g)}
+.ej-card p{flex:1}
+.ej-ico{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;font-size:1.8rem;margin-bottom:18px;background:rgba(125,255,90,.1);border:1px solid rgba(125,255,90,.25)}
+.ej-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+.ej-host{font-family:var(--fm);font-size:.72rem;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ej-go{display:inline-flex;align-items:center;gap:6px;color:var(--g);font-family:var(--fh);font-weight:600;font-size:.92rem;white-space:nowrap}
+.ej-go svg{width:18px;height:18px;transition:transform .25s}
+.ej-card:hover .ej-go svg{transform:translateX(4px)}
+.ej-skel{height:230px;border-radius:var(--r);border:1px solid var(--line);background:linear-gradient(100deg,rgba(255,255,255,.03) 30%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.03) 70%) 0 0/300% 100%;animation:ejSk 1.4s infinite linear}
+@keyframes ejSk{to{background-position:-300% 0}}
+.ej-empty{text-align:center;color:var(--mut);padding:40px 0}
+.ej-cta{display:flex;justify-content:center;margin-top:50px}
+.ej-admin-link{margin-top:14px;font-size:.78rem;color:var(--mut);opacity:.6;padding:6px 12px;border-radius:10px;border:1px solid transparent}
+.ej-admin-link:hover{opacity:1;border-color:var(--line);color:var(--g)}
+body.ej-lock{overflow:hidden}
+/* visor */
+.ej-viewer{position:fixed;inset:0;z-index:80;display:flex;flex-direction:column;background:#05080a;animation:fade .3s}
+.ej-viewer[hidden]{display:none}
+.ej-vbar{display:flex;align-items:center;gap:12px;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top));background:rgba(5,8,10,.92);border-bottom:1px solid var(--line)}
+.ej-vtitle{flex:1;min-width:0;font-family:var(--fh);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+.ej-vframe{position:relative;flex:1;background:#fff}
+.ej-vframe iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+.ej-vload{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:14px;background:#05080a;color:var(--mut);z-index:1;transition:opacity .4s}
+.ej-vload.done{opacity:0;pointer-events:none}
+.ej-vload span{width:42px;height:42px;border-radius:50%;border:3px solid rgba(125,255,90,.2);border-top-color:var(--g);animation:ejSpin .8s linear infinite}
+@keyframes ejSpin{to{transform:rotate(360deg)}}
+@media (max-width:520px){.ej-vbar .btn span{display:none}.ej-vbar .btn{padding:0;width:42px}}
+/* admin */
+.ej-admin{position:fixed;inset:0;z-index:70;overflow:auto;background:rgba(5,8,10,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:calc(20px + env(safe-area-inset-top)) 16px 40px;animation:fade .3s}
+.ej-admin[hidden]{display:none}
+.ej-admin-in{max-width:880px;margin:0 auto}
+.ej-admin-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.ej-admin-head h3{font-family:var(--fh);font-size:1.5rem}
+.ej-admin-actions{display:flex;gap:8px}
+.ej-form{padding:22px;border-radius:var(--r);border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.ej-row{display:flex;gap:12px;flex-wrap:wrap}
+.ej-grow{flex:1;min-width:200px}
+.ej-ico-f{width:90px}
+.ej-ico-f input{text-align:center;font-size:1.3rem!important}
+.ej-checks{display:flex;flex-wrap:wrap;gap:10px 22px}
+.ej-chk{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--txt);cursor:pointer}
+.ej-chk input{width:18px;height:18px;accent-color:var(--g)}
+.ej-sub{font-family:var(--fh);margin:28px 0 12px;font-size:1.1rem}
+.ej-alist{display:grid;gap:10px}
+.ej-arow{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.ej-arow.off{opacity:.55}
+.ej-aico{font-size:1.5rem;width:44px;text-align:center;flex:0 0 auto}
+.ej-ainfo{flex:1;min-width:0}
+.ej-ainfo em{font-style:normal;font-size:.7rem;padding:2px 7px;border-radius:8px;background:rgba(255,122,26,.15);color:#ffb37a;margin-left:6px}
+.ej-ainfo small{display:block;color:var(--mut);font-family:var(--fm);font-size:.7rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ej-abtns{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.ej-abtns button{width:36px;height:36px;border-radius:10px;background:var(--panel);border:1px solid var(--line);font-size:.95rem}
+.ej-abtns button:hover:not(:disabled){border-color:var(--g)}
+.ej-abtns button:disabled{opacity:.3}
+@media (max-width:600px){.ej-arow{flex-wrap:wrap}.ej-abtns{width:100%}}
+/* modal admin */
+.ej-mcard{text-align:left}
+.ej-mcard h3{text-align:center}
+.ej-mut{color:var(--mut);font-size:.9rem;margin:10px 0;text-align:center}
+.ej-login{margin-top:6px}
+.ej-code{text-align:center;font-family:var(--fm)!important;font-size:1.6rem!important;letter-spacing:.4em}
+.ej-or{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--mut);font-size:.8rem}
+.ej-or::before,.ej-or::after{content:"";flex:1;height:1px;background:var(--line)}
+.ej-full{width:100%}
+.ej-stack{display:grid;gap:10px;margin-top:14px}
+.ej-qr{background:#fff;padding:12px;border-radius:14px;width:max-content;margin:12px auto}
+.ej-link{color:var(--g);text-decoration:underline}
+.ej-secret{word-break:break-all;user-select:all;color:var(--txt)}
+.ej-page .top-actions{margin-left:auto}
