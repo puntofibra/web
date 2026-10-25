@@ -268,8 +268,11 @@ const isIOS = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel'
 const isSafari = isIOS && !/crios|fxios|edgios|opios|gsa\//i.test(ua);
 const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 const installBtn = $('#installBtn');
-let deferred = null;
-addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; if (!standalone) installBtn.hidden = false; });
+// El evento de instalación se captura en <head> (puede llegar antes de que cargue este script)
+let deferred = window.__bip || null;
+const showInstall = () => { deferred = window.__bip || deferred; if (deferred && !standalone) installBtn.hidden = false; };
+showInstall();
+addEventListener('bip-ready', showInstall);
 addEventListener('appinstalled', () => { installBtn.hidden = true; toast('¡App instalada! 🎉'); SFX.play('success'); });
 if (isIOS && !standalone) installBtn.hidden = false;
 const openModal = m => { m.hidden = false; };
@@ -278,7 +281,12 @@ $$('.modal').forEach(m => {
   m.addEventListener('click', e => { if (e.target === m || e.target.closest('.modal-x')) closeModal(m); });
 });
 installBtn.addEventListener('click', async () => {
-  if (deferred) { deferred.prompt(); await deferred.userChoice; deferred = null; installBtn.hidden = true; return; }
+  if (deferred) {
+    try { deferred.prompt(); const r = await deferred.userChoice; } catch (e) {}
+    installBtn.hidden = true;
+    deferred = null; window.__bip = null;
+    return;
+  }
   if (isIOS) { $('#iosNotSafari').hidden = isSafari; openModal($('#iosModal')); return; }
   toast('Usa el menú del navegador → «Instalar aplicación»');
 });
