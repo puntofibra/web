@@ -1,4 +1,4 @@
-const CACHE = 'futurmovil-v2';
+const CACHE = 'futurmovil-v3';
 const ASSETS = ['./', 'index.html', 'styles.css', 'app.js', 'manifest.json',
   'futurmovil.webp', 'puntofibra.webp', 'avatar.webp', 'avatar-win.webp',
   'icon-192.png', 'icon-512.png', 'apple-touch-icon.png', 'favicon.png'];
