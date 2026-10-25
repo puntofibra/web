@@ -411,3 +411,56 @@ body.ej-lock{overflow:hidden}
 .ej-ico-del{font-size:.75rem;margin-top:6px}
 .install-ready{animation:instPulse 1s ease-in-out 6;border-color:var(--g)!important;box-shadow:0 0 0 0 rgba(125,255,90,.6)}
 @keyframes instPulse{50%{box-shadow:0 0 0 8px rgba(125,255,90,0)}}
+
+/* ---- Móvil: app de juego con el robot ---- */
+.phone-screen.pg{position:relative;padding:44px 14px 10px;gap:10px;background:radial-gradient(120% 60% at 50% 30%,rgba(125,255,90,.16),transparent 60%),linear-gradient(180deg,#0c1a14,#05090a 70%)}
+.pg-status{position:absolute;top:14px;left:22px;right:20px;display:flex;align-items:center;font-size:.66rem;font-family:var(--fh);color:#dfe}
+.pg-status b{font-weight:600}
+.pg-sig{margin-left:auto;display:flex;align-items:flex-end;gap:2px;height:9px;margin-right:6px}
+.pg-sig i{width:3px;background:#dfe;border-radius:1px}.pg-sig i:nth-child(1){height:3px}.pg-sig i:nth-child(2){height:5px}.pg-sig i:nth-child(3){height:7px}.pg-sig i:nth-child(4){height:9px}
+.pg-bat{width:18px;height:9px;border:1px solid #dfe;border-radius:3px;position:relative;padding:1px}
+.pg-bat::before{content:"";display:block;height:100%;width:75%;background:var(--g);border-radius:1px}
+.pg-head{display:flex;align-items:center;justify-content:space-between}
+.pg-app{display:flex;align-items:center;gap:8px}
+.pg-logo{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-family:var(--fh);font-weight:800;color:#03140a;background:linear-gradient(135deg,var(--g),var(--g2));box-shadow:0 0 14px rgba(125,255,90,.5)}
+.pg-app b{display:block;font-family:var(--fh);font-size:.9rem;line-height:1.1}
+.pg-app small{font-size:.62rem;color:var(--mut)}
+.pg-coins{display:flex;align-items:center;gap:4px;padding:4px 9px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(125,255,90,.35);font-size:.72rem}
+.pg-coins b{font-family:var(--fm);color:var(--g);min-width:2.6em;text-align:right}
+.pg-stage{position:relative;flex:1;min-height:170px;display:grid;place-items:center}
+.pg-ring{position:absolute;border-radius:50%;border:2px dashed rgba(125,255,90,.35);animation:pgSpin 14s linear infinite}
+.pg-ring.r1{width:170px;height:170px}
+.pg-ring.r2{width:122px;height:122px;border:1px solid rgba(46,139,255,.35);border-top-color:rgba(125,255,90,.9);animation-duration:3.5s;animation-direction:reverse}
+@keyframes pgSpin{to{transform:rotate(360deg)}}
+.pg-glow{position:absolute;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(125,255,90,.35),transparent 65%);animation:pgPulse 2.6s ease-in-out infinite}
+@keyframes pgPulse{50%{transform:scale(1.15);opacity:.6}}
+.pg-bot{position:relative;width:128px;height:auto;filter:drop-shadow(0 10px 16px rgba(0,0,0,.6)) drop-shadow(0 0 10px rgba(125,255,90,.25));animation:pgFly 3s ease-in-out infinite}
+@keyframes pgFly{0%,100%{transform:translateY(4px) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+.pg-star{position:absolute;color:var(--g);font-size:.8rem;opacity:0;animation:pgTwinkle 3s ease-in-out infinite;text-shadow:0 0 8px var(--g)}
+.pg-star.s1{top:12%;left:14%}.pg-star.s2{top:22%;right:12%;color:#6fb0ff;animation-delay:-1s}.pg-star.s3{bottom:16%;left:22%;color:#ffb84d;animation-delay:-2s}
+@keyframes pgTwinkle{50%{opacity:1;transform:scale(1.4) rotate(20deg)}}
+.pg-plus{position:absolute;top:30%;right:16%;font-family:var(--fh);font-weight:800;color:var(--g);text-shadow:0 0 10px rgba(125,255,90,.8);opacity:0;pointer-events:none}
+.pg-plus.go{animation:pgPlus .9s ease-out}
+@keyframes pgPlus{0%{opacity:0;transform:translateY(8px) scale(.6)}25%{opacity:1;transform:translateY(0) scale(1.15)}100%{opacity:0;transform:translateY(-26px) scale(1)}}
+.pg-xp-t{display:flex;justify-content:space-between;font-size:.66rem;color:var(--mut);margin-bottom:5px}
+.pg-xp-t b{color:var(--txt);font-family:var(--fh)}
+.pg-xp-bar{height:8px;border-radius:8px;background:rgba(255,255,255,.07);overflow:hidden}
+.pg-xp-bar i{display:block;height:100%;width:20%;border-radius:8px;background:linear-gradient(90deg,var(--g2),var(--g));box-shadow:0 0 10px var(--g);animation:pgXp 6s ease-in-out infinite}
+@keyframes pgXp{0%{width:18%}80%,100%{width:96%}}
+.pg-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pg-cards div{border-radius:12px;padding:7px 10px;border:1px solid var(--line);background:rgba(46,139,255,.1)}
+.pg-cards div+div{background:rgba(255,122,26,.1)}
+.pg-cards small{display:block;font-size:.6rem;color:var(--mut)}
+.pg-cards b{font-family:var(--fh);font-size:1rem}
+.pg-play{text-align:center;padding:9px;border-radius:13px;background:linear-gradient(135deg,var(--g),var(--g2));color:#03140a;font-weight:800;font-family:var(--fh);font-size:.9rem;animation:pgBtn 2s ease-in-out infinite}
+@keyframes pgBtn{50%{box-shadow:0 0 0 6px rgba(125,255,90,0),0 0 18px rgba(125,255,90,.55)}}
+.pg-tabs{position:relative;display:flex;justify-content:space-around;align-items:center;height:34px;border-radius:14px;background:rgba(255,255,255,.05)}
+.pg-tabs i{width:14px;height:14px;border-radius:4px;background:rgba(255,255,255,.25);position:relative;z-index:1}
+.pg-tabs i:nth-child(2){border-radius:50%}.pg-tabs i:nth-child(3){transform:rotate(45deg) scale(.85)}.pg-tabs i:nth-child(4){border-radius:50% 50% 4px 4px}
+.pg-tab-pill{position:absolute;top:4px;bottom:4px;width:22%;left:1.5%;border-radius:10px;background:rgba(125,255,90,.18);border:1px solid rgba(125,255,90,.4);animation:pgTab 8s steps(1) infinite}
+@keyframes pgTab{0%{left:1.5%}25%{left:26.5%}50%{left:51.5%}75%{left:76.5%}}
+.pg-toast{position:absolute;top:40px;left:12px;right:12px;z-index:4;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:14px;background:rgba(20,30,26,.92);border:1px solid rgba(125,255,90,.4);box-shadow:0 10px 24px rgba(0,0,0,.5);font-size:.7rem;transform:translateY(-140%);opacity:0;animation:pgToast 9s ease-in-out infinite 2s}
+.pg-toast b{display:block;font-family:var(--fh)}.pg-toast small{color:var(--mut);font-size:.6rem}
+.pg-toast>span{font-size:1.1rem}
+@keyframes pgToast{0%,62%,100%{transform:translateY(-140%);opacity:0}68%,88%{transform:translateY(0);opacity:1}}
+@media (prefers-reduced-motion:reduce){.pg *{animation:none!important}.pg-xp-bar i{width:68%}.pg-toast{display:none}}

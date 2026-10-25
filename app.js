@@ -201,8 +201,13 @@ const typeCode = async () => {
 // el sonido de tecleo solo suena mientras la animación se ve en pantalla
 new IntersectionObserver(es => { codeVisible = es[0].isIntersecting; if (codeVisible) typeCode(); }, { threshold: .3 }).observe(codeEl);
 // contador del móvil
-const ps = $('#psCount'); let psv = 0;
-setInterval(() => { psv = (psv + Math.floor(Math.random() * 3) + 1) % 999; ps.textContent = psv; }, 900);
+const ps = $('#psCount'), psPlus = $('#psPlus'); let psv = 1250;
+ps.textContent = psv.toLocaleString('es-ES');
+setInterval(() => {
+  const n = [10, 10, 25, 50][Math.floor(Math.random() * 4)];
+  psv = psv > 99000 ? 1250 : psv + n; ps.textContent = psv.toLocaleString('es-ES');
+  psPlus.textContent = '+' + n; psPlus.classList.remove('go'); void psPlus.offsetWidth; psPlus.classList.add('go');
+}, 1600);
 
 /* ---------- Fondo: fibras de luz ---------- */
 (() => {
