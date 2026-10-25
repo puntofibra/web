@@ -283,7 +283,14 @@ const closeModal = m => { m.hidden = true; };
 $$('.modal').forEach(m => {
   m.addEventListener('click', e => { if (e.target === m || e.target.closest('.modal-x')) closeModal(m); });
 });
+const waitBip = ms => new Promise(res => {
+  if (window.__bip) return res(window.__bip);
+  const f = () => res(window.__bip); addEventListener('bip-ready', f, { once: true });
+  setTimeout(() => { removeEventListener('bip-ready', f); res(window.__bip || null); }, ms);
+});
 installBtn.addEventListener('click', async () => {
+  // En Android el aviso de Chrome puede llegar tarde: lo esperamos un momento antes de explicar a mano
+  if (!deferred && !isIOS) { toast('Preparando la instalación…'); deferred = await waitBip(3000); }
   if (deferred) {
     let ok = false;
     try { deferred.prompt(); const r = await deferred.userChoice; ok = r && r.outcome === 'accepted'; } catch (e) {}
