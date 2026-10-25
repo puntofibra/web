@@ -275,7 +275,9 @@ const showInstall = () => { deferred = window.__bip || deferred; if (deferred &&
 showInstall();
 addEventListener('bip-ready', showInstall);
 addEventListener('appinstalled', () => { installBtn.hidden = true; toast('¡App instalada! 🎉'); SFX.play('success'); });
-if (isIOS && !standalone) installBtn.hidden = false;
+// En móvil el botón sale siempre (Chrome a veces no avisa tras desinstalar); en PC solo si el navegador lo permite
+const isMobile = /android|iphone|ipad|ipod|mobile/i.test(ua) || isIOS;
+if (isMobile && !standalone) installBtn.hidden = false;
 const openModal = m => { m.hidden = false; };
 const closeModal = m => { m.hidden = true; };
 $$('.modal').forEach(m => {
@@ -283,13 +285,14 @@ $$('.modal').forEach(m => {
 });
 installBtn.addEventListener('click', async () => {
   if (deferred) {
-    try { deferred.prompt(); const r = await deferred.userChoice; } catch (e) {}
-    installBtn.hidden = true;
+    let ok = false;
+    try { deferred.prompt(); const r = await deferred.userChoice; ok = r && r.outcome === 'accepted'; } catch (e) {}
     deferred = null; window.__bip = null;
+    if (ok || !isMobile) installBtn.hidden = true;
     return;
   }
   if (isIOS) { $('#iosNotSafari').hidden = isSafari; openModal($('#iosModal')); return; }
-  toast('Usa el menú del navegador → «Instalar aplicación»');
+  toast(/android/i.test(ua) ? 'Pulsa ⋮ arriba a la derecha → «Instalar aplicación» o «Añadir a pantalla de inicio»' : 'Usa el menú del navegador → «Instalar aplicación»');
 });
 // En iPhone, mostrar las instrucciones una vez automáticamente
 if (isIOS && !standalone && store.get('fm_ios_tip') !== '1') {
