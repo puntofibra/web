@@ -186,19 +186,20 @@ const code = [
   ['','  soporte: '],['k','true'],['','\n});\n'],
   ['f','app'],['','.'],['f','lanzar'],['','(); '],['c','// 🚀']
 ];
-let codeStarted = false;
+let codeStarted = false, codeVisible = false;
 const typeCode = async () => {
   if (codeStarted) return; codeStarted = true;
   for (;;) {
     codeEl.innerHTML = '';
     for (const [cls, txt] of code) {
       const span = document.createElement('span'); if (cls && cls !== ',') span.className = cls; codeEl.appendChild(span);
-      for (const ch of txt) { span.textContent += ch; if (ch.trim() && Math.random() < .35) SFX.play('type'); await new Promise(r => setTimeout(r, reduce ? 0 : 28 + Math.random() * 40)); }
+      for (const ch of txt) { span.textContent += ch; if (codeVisible && !document.hidden && ch.trim() && Math.random() < .35) SFX.play('type'); await new Promise(r => setTimeout(r, reduce ? 0 : 28 + Math.random() * 40)); }
     }
     await new Promise(r => setTimeout(r, 4000));
   }
 };
-new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { typeCode(); o.disconnect(); } }, { threshold: .3 }).observe(codeEl);
+// el sonido de tecleo solo suena mientras la animación se ve en pantalla
+new IntersectionObserver(es => { codeVisible = es[0].isIntersecting; if (codeVisible) typeCode(); }, { threshold: .3 }).observe(codeEl);
 // contador del móvil
 const ps = $('#psCount'); let psv = 0;
 setInterval(() => { psv = (psv + Math.floor(Math.random() * 3) + 1) % 999; ps.textContent = psv; }, 900);

@@ -6,16 +6,18 @@
 <title>FuturMovil · Fibra, Móvil, TV y Apps a medida</title>
 <meta name="description" content="FuturMovil: fibra, líneas móviles, TV con fútbol, deportes, cine y series. Y ahora desarrollamos apps para iPhone, Android y webs a medida a precios muy competitivos.">
 <meta name="theme-color" content="#05080a">
+<style>html,body{background:#05080a;margin:0}#intro{position:fixed;inset:0;z-index:100;background:#05080a;display:grid;place-items:center;align-content:center;gap:28px}.intro-logo{width:min(70vw,420px)}.intro-bar{width:min(50vw,220px);height:3px;background:rgba(255,255,255,.09);border-radius:3px;overflow:hidden}</style>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="FuturMovil">
 <meta property="og:title" content="FuturMovil · powered by Puntofibra">
 <meta property="og:description" content="Fibra, móvil, TV con fútbol y apps a medida.">
-<meta property="og:image" content="icon-512.png">
+<meta property="og:image" content="icon-512.png?v=2">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="favicon.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon.png?v=2">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
+<link rel="preload" as="image" href="futurmovil.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -304,7 +306,7 @@
 <div id="iosModal" class="modal" hidden>
   <div class="modal-card">
     <button class="modal-x" aria-label="Cerrar">×</button>
-    <img src="apple-touch-icon.png" alt="" class="modal-icon">
+    <img src="apple-touch-icon.png?v=2" alt="" class="modal-icon">
     <h3>Instala FuturMovil en tu iPhone</h3>
     <p id="iosNotSafari" class="warn" hidden>Abre esta página en <b>Safari</b> para poder instalarla.</p>
     <ol class="ios-steps">
@@ -331,6 +333,6 @@
 
 <div id="toast" class="toast" role="status"></div>
 
-<script src="app.js?v=5"></script>
+<script src="app.js?v=6"></script>
 </body>
 </html>
