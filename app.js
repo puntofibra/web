@@ -293,7 +293,15 @@ const waitBip = ms => new Promise(res => {
   const f = () => res(window.__bip); addEventListener('bip-ready', f, { once: true });
   setTimeout(() => { removeEventListener('bip-ready', f); res(window.__bip || null); }, ms);
 });
+// ¿Ya está instalada en este móvil? (Chrome Android lo sabe gracias a related_applications del manifest)
+let appInstalled = false;
+if (!standalone && navigator.getInstalledRelatedApps) {
+  navigator.getInstalledRelatedApps().then(a => {
+    if (a && a.length) { appInstalled = true; installBtn.hidden = false; installBtn.querySelector('span').textContent = 'Instalada'; }
+  }).catch(() => {});
+}
 installBtn.addEventListener('click', async () => {
+  if (appInstalled && !window.__bip) { toast('La app ya está instalada en este móvil. Ábrela desde tus aplicaciones (icono del robot).', 6000); return; }
   // En Android el aviso de Chrome puede llegar tarde: lo esperamos un momento antes de explicar a mano
   if (!deferred && !isIOS) { toast('Preparando la instalación…'); deferred = await waitBip(3000); }
   if (deferred) {

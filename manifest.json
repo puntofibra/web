@@ -11,8 +11,29 @@
   "theme_color": "#05080a",
   "lang": "es",
   "icons": [
-    {"src": "icon-192.png?v=2", "sizes": "192x192", "type": "image/png", "purpose": "any"},
-    {"src": "icon-512.png?v=2", "sizes": "512x512", "type": "image/png", "purpose": "any"},
-    {"src": "icon-maskable-512.png?v=2", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+    {
+      "src": "icon-192.png?v=2",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png?v=2",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png?v=2",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://puntofibra.github.io/web/manifest.json"
+    }
   ]
 }
