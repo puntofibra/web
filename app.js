@@ -14,7 +14,7 @@ const store = {
 
 /* ---------- SONIDO (Web Audio, sin archivos) ---------- */
 const SFX = (() => {
-  let ctx = null, master = null, on = store.get('fm_sound') === '1', lastHover = 0;
+  let ctx = null, master = null, on = store.get('fm_sound') !== '0', lastHover = 0;
   const ensure = () => {
     if (!ctx) {
       const AC = window.AudioContext || window.webkitAudioContext;
@@ -50,7 +50,7 @@ const SFX = (() => {
     s.connect(bp); bp.connect(g); g.connect(master); s.start(t0);
   };
   const play = (name) => {
-    if (!on || !ensure()) return;
+    if (!on || !ensure() || ctx.state !== 'running') return; // hasta el primer toque el navegador no deja sonar
     const t = ctx.currentTime + .01;
     switch (name) {
       case 'on':
@@ -76,7 +76,7 @@ const SFX = (() => {
     const b = $('#soundBtn');
     b.classList.toggle('on', on);
     b.setAttribute('aria-label', on ? 'Silenciar' : 'Activar sonido');
-    if (on) { ensure(); play('on'); }
+    if (on) { const c = ensure(); if (c) c.resume().then(() => play('on')).catch(() => {}); }
   };
   return { play, set, get on(){ return on; }, ensure };
 })();
@@ -84,7 +84,14 @@ const SFX = (() => {
 $('#soundBtn').classList.toggle('on', SFX.on);
 $('#soundBtn').addEventListener('click', () => SFX.set(!SFX.on));
 // Si el sonido estaba activado de antes, el navegador exige un gesto para arrancar el audio
-addEventListener('pointerdown', () => { if (SFX.on) SFX.ensure(); }, { once: true });
+// Sonido encendido por defecto: el navegador solo deja arrancar el audio tras el primer toque/clic/tecla
+let unlocked = false;
+const unlock = (e) => {
+  if (unlocked) return; unlocked = true;
+  ['pointerdown','touchstart','keydown'].forEach(ev => removeEventListener(ev, unlock, true));
+  if (SFX.on) { const c = SFX.ensure(); if (c) c.resume().then(() => { if (!(e && e.target.closest && e.target.closest('#soundBtn'))) SFX.play('on'); }).catch(() => {}); }
+};
+['pointerdown','touchstart','keydown'].forEach(ev => addEventListener(ev, unlock, true));
 
 document.addEventListener('click', e => {
   const el = e.target.closest('a,button,label');
