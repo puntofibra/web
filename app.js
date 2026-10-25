@@ -348,4 +348,22 @@ form.addEventListener('submit', async e => {
 });
 
 $('#year').textContent = new Date().getFullYear();
+
+/* ---------- Contador de visitas (1 por dispositivo y día) ---------- */
+(async () => {
+  if (!API) return;
+  let id;
+  try {
+    id = localStorage.getItem('fm_dev');
+    if (!id) { id = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)); localStorage.setItem('fm_dev', id); }
+  } catch (e) { id = 'anon-' + Math.random().toString(36).slice(2); }
+  try {
+    const r = await jsonp(API, { action: 'visita', id });
+    if (r && r.ok) {
+      $('#visHoy').textContent = r.hoy.toLocaleString('es-ES');
+      $('#visTxt').textContent = r.hoy === 1 ? 'visita hoy' : 'visitas hoy';
+      $('#visitas').hidden = false;
+    }
+  } catch (e) {}
+})();
 })();
