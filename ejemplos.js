@@ -246,7 +246,7 @@ function pintaLista() {
       <h3>${esc(x.titulo)}</h3>
       <p>${esc(x.desc).replace(/\n/g, '<br>')}</p>
       <div class="ej-foot">
-        <span class="ej-host">${esc(host(x.url))}</span>
+        <span></span>
         <span class="ej-go">Ver ejemplo
           <svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </div>
