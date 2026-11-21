@@ -462,6 +462,15 @@ function pintaIcoForm() {
   $('#icoQuitar').hidden = !v;
 }
 $('#icoPick').addEventListener('click', () => $('#icoFile').click());
+$('#icoPrompt').addEventListener('click', async () => {
+  const t = (form.titulo.value || '').trim();
+  const esApp = form.tipo.value === 'app';
+  const deTipo = esApp ? 'de la app' : 'del juego', elTipo = esApp ? 'la app' : 'el juego';
+  const nombre = t ? ('"' + t + '"') : '(pon antes el título)';
+  const txt = 'Ilustración digital horizontal en formato 16:9 (1280x720 px) para la portada de la tarjeta ' + deTipo + ' ' + nombre + '. Básate en las imágenes que te adjunto para respetar el mismo estilo, personajes y colores. Escena llamativa y atractiva que represente ' + elTipo + ', composición centrada y con aire a los lados. Sin texto, sin letras, sin marcos ni bordes. La ilustración debe llenar todo el encuadre 16:9.';
+  try { await navigator.clipboard.writeText(txt); toast('Prompt copiado ✅'); SFX.play('pop'); }
+  catch (e) { prompt('Copia el prompt:', txt); }
+});
 $('#icoQuitar').addEventListener('click', () => { form.icono.value = ''; pintaIcoForm(); });
 $('#icoFile').addEventListener('change', async e => {
   const f = e.target.files[0]; e.target.value = '';
