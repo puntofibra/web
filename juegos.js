@@ -302,6 +302,12 @@ function cerrarVisor() {
   document.body.classList.remove('ej-lock');
 }
 $('#vBack').addEventListener('click', () => { if (history.state && history.state.ej) history.back(); else { cerrarVisor(); history.replaceState(null, '', location.pathname); } });
+$('#vInstall').addEventListener('click', () => {
+  const x = S.lista.find(e => e.id === abierto);
+  const url = x ? x.url : $('#vOpen').href;
+  window.open(url, '_blank', 'noopener');
+  toast('Ábrela y pulsa «Instalar app» para añadirla a tu móvil');
+});
 addEventListener('popstate', () => { if (location.hash.startsWith('#ver=')) abrirDesdeHash(); else cerrarVisor(); });
 function abrirDesdeHash() {
   const m = location.hash.match(/^#ver=(.+)$/);
