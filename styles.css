@@ -616,3 +616,12 @@ body.ej-lock{overflow:hidden}
 .f-back .f-hi{color:#daf7e6;font-size:.93rem;max-width:92%;line-height:1.45}
 .f-back .f-v{font-family:var(--fm);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--g);opacity:.85}
 @media (prefers-reduced-motion:reduce){.flip3d{transition-duration:.001s}}
+
+/* Panel admin de la zona privada (llave NFC) */
+.adm-h{font-family:var(--fh);font-weight:700;color:var(--g);font-size:.95rem;margin:4px 0 10px;text-align:left}
+.adm-list{display:flex;flex-direction:column;gap:8px;text-align:left}
+.adm-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.35)}
+.adm-k{font-family:var(--fm);font-weight:700;font-size:1.15rem;color:#fff;letter-spacing:.14em;min-width:62px}
+.adm-d{color:var(--mut);font-size:.9rem}
+.adm-foot{margin-top:14px;color:var(--mut);font-size:.8rem;text-align:left;opacity:.85}
+#admScan{width:100%;margin-top:4px}
