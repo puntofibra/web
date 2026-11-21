@@ -478,11 +478,10 @@ $('#year').textContent = new Date().getFullYear();
     chip.addEventListener('click', () => {
       const t = Date.now();
       toques = toques.filter(x => t - x < 3000); toques.push(t);
-      chip.classList.remove('tap'); void chip.offsetWidth; chip.classList.add('tap');
       if (toques.length < 5) return;
       toques = [];
       card.classList.remove('ok', 'bad'); key.value = ''; err.textContent = '';
-      tvM.hidden = false; SFX.play('pop');
+      tvM.hidden = false;
       setTimeout(() => key.focus(), 80);
     });
     const huella = async t => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('fm-tv|' + t)))].map(b => b.toString(16).padStart(2, '0')).join('');
