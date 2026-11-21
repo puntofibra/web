@@ -239,14 +239,16 @@ if (!isTouch && !reduce) {
 const host = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return ''; } };
 function cardHtml(x) {
   return `
-    <article class="card ej-card tilt reveal" data-sfx-hover data-id="${esc(x.id)}" tabindex="0" role="button" aria-label="Abrir ${esc(x.titulo)}">
-      <div class="ej-ico">${icoHtml(x.icono)}</div>
-      <h3>${esc(x.titulo)}</h3>
-      <p>${esc(x.desc).replace(/\n/g, '<br>')}</p>
-      <div class="ej-foot">
-        <span></span>
-        <span class="ej-go">Abrir
-          <svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <article class="card ej-card ja-card tilt reveal" data-sfx-hover data-id="${esc(x.id)}" tabindex="0" role="button" aria-label="Abrir ${esc(x.titulo)}">
+      <div class="ja-cover">${icoHtml(x.icono)}</div>
+      <div class="ja-body">
+        <h3>${esc(x.titulo)}</h3>
+        <p>${esc(x.desc).replace(/\n/g, '<br>')}</p>
+        <div class="ej-foot">
+          <span></span>
+          <span class="ej-go">Abrir
+            <svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
       </div>
     </article>`;
 }
@@ -473,18 +475,17 @@ function iconoDe(file) {
     const url = URL.createObjectURL(file), img = new Image();
     img.onload = () => {
       URL.revokeObjectURL(url);
-      const N = 256, cv = document.createElement('canvas'); cv.width = cv.height = N;
-      const c = cv.getContext('2d'), s = Math.min(img.width, img.height);
-      c.imageSmoothingQuality = 'high';
-      c.drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, N, N); // recorte cuadrado al centro
-      let d = cv.toDataURL('image/webp', .86);
-      if (!/^data:image\/webp/.test(d) || d.length > 45000) {
-        d = cv.toDataURL('image/png');
-        if (d.length > 45000) { // sin webp y PNG muy pesado: JPG sobre fondo oscuro
-          const c2 = document.createElement('canvas'); c2.width = c2.height = N; const x = c2.getContext('2d');
-          x.fillStyle = '#0b1114'; x.fillRect(0, 0, N, N); x.drawImage(cv, 0, 0);
-          d = c2.toDataURL('image/jpeg', .85);
-        }
+      const W = 640, H = 360, AR = W / H; // ilustración horizontal 16:9
+      const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+      const c = cv.getContext('2d'); c.imageSmoothingQuality = 'high';
+      let sw = img.width, sh = img.width / AR; // recorte 16:9 al centro
+      if (sh > img.height) { sh = img.height; sw = img.height * AR; }
+      c.drawImage(img, (img.width - sw) / 2, (img.height - sh) / 2, sw, sh, 0, 0, W, H);
+      let d = cv.toDataURL('image/webp', .82), q = .82;
+      while (/^data:image\/webp/.test(d) && d.length > 46000 && q > .4) { q -= .1; d = cv.toDataURL('image/webp', q); }
+      if (!/^data:image\/webp/.test(d) || d.length > 46000) {
+        let qj = .74; d = cv.toDataURL('image/jpeg', qj);
+        while (d.length > 46000 && qj > .4) { qj -= .1; d = cv.toDataURL('image/jpeg', qj); }
       }
       res(d);
     };
