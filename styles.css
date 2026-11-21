@@ -650,6 +650,6 @@ body.ej-lock{overflow:hidden}
 .ej-vbar{position:absolute;top:0;left:0;right:0;z-index:3;background:none;border-bottom:0;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;pointer-events:none}
 .ej-vbar>*{pointer-events:auto}
 .ej-vtitle{display:none}
-#vInstall{margin-left:auto}
+#vOpen{margin-left:auto}
 .ej-vbar .btn-ghost,.ej-vbar .icon-btn{background:rgba(5,8,10,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1)}
 .ej-vbar .btn,.ej-vbar .icon-btn{box-shadow:0 6px 18px rgba(0,0,0,.45)}
