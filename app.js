@@ -402,4 +402,70 @@ $('#year').textContent = new Date().getFullYear();
     }
   } catch (e) {}
 })();
+/* ---------- v12 · Barra de avance, luz en tarjetas, terminal y titulares ---------- */
+(() => {
+  const bar = $('#scrollBar');
+  if (bar) {
+    const upd = () => { const h = document.documentElement.scrollHeight - innerHeight; bar.style.transform = 'scaleX(' + (h > 0 ? Math.min(1, scrollY / h) : 0) + ')'; };
+    addEventListener('scroll', upd, { passive: true }); addEventListener('resize', upd); upd();
+  }
+
+  // La luz de cada tarjeta sigue al ratón
+  if (!isTouch) $$('.bx').forEach(el => el.addEventListener('pointermove', e => {
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--mx', (e.clientX - r.left) + 'px'); el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  }));
+
+  // Titulares pequeños que se «descifran» al aparecer
+  const ABC = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789#/<>';
+  const scr = new IntersectionObserver(es => es.forEach(en => {
+    if (!en.isIntersecting) return;
+    const el = en.target, fin = el.dataset.txt; scr.unobserve(el);
+    if (reduce) return;
+    let n = 0;
+    const t = setInterval(() => {
+      n += 1.2;
+      el.textContent = fin.split('').map((c, i) => (i < n || c === ' ' || c === '·') ? c : ABC[Math.floor(Math.random() * ABC.length)]).join('');
+      if (n >= fin.length) { el.textContent = fin; clearInterval(t); }
+    }, 34);
+  }), { threshold: .6 });
+  $$('[data-scramble]').forEach(el => { el.dataset.txt = el.textContent; scr.observe(el); });
+
+  // Terminal: se escribe sola cuando entra en pantalla
+  const out = $('#termOut');
+  if (out) {
+    const L = [
+      ['p', '$ ', 'futurmovil crear --app "tu-negocio"', 26],
+      ['dim', '', 'Analizando cómo trabajas…', 0],
+      ['ok', '✓ ', 'Diseño a medida', 0],
+      ['ok', '✓ ', 'Panel para ti y tus empleados', 0],
+      ['ok', '✓ ', 'Instalable en iPhone y Android', 0],
+      ['ok', '✓ ', 'Datos guardados en la nube', 0],
+      ['ok', '✓ ', 'Publicada en internet', 0],
+      ['hot', '→ ', 'Lista para tus clientes 🚀', 0]
+    ];
+    const esc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    const pinta = (hechas, parcial) => { out.innerHTML = hechas.join('\n') + (hechas.length && parcial !== null ? '\n' : '') + (parcial === null ? '' : parcial) + '<span class="cur"></span>'; };
+    let corriendo = false;
+    const corre = async () => {
+      if (corriendo) return; corriendo = true;
+      const espera = ms => new Promise(r => setTimeout(r, ms));
+      if (reduce) { pinta(L.map(l => '<span class="' + l[0] + '">' + l[1] + '</span>' + esc(l[2])), null); return; }
+      const hechas = [];
+      for (const l of L) {
+        const pre = '<span class="' + l[0] + '">' + l[1] + '</span>';
+        if (l[3]) { for (let i = 0; i <= l[2].length; i++) { pinta(hechas, pre + esc(l[2].slice(0, i))); await espera(l[3] + Math.random() * 30); } await espera(420); }
+        else { await espera(430); }
+        hechas.push(pre + (l[0] === 'dim' || l[0] === 'hot' ? '<span class="' + l[0] + '">' + esc(l[2]) + '</span>' : esc(l[2])));
+        pinta(hechas, '');
+        if (l[0] === 'ok') SFX.play('click');
+      }
+    };
+    pinta([], '');
+    new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); corre(); } }, { threshold: .45 }).observe($('#term'));
+  }
+
+  // Dudas: solo una abierta a la vez
+  $$('.faq details').forEach(d => d.addEventListener('toggle', () => { if (d.open) $$('.faq details').forEach(o => { if (o !== d) o.open = false; }); }));
+})();
 })();
