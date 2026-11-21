@@ -621,3 +621,27 @@ $('#year').textContent = new Date().getFullYear();
   })();
 })();
 })();
+
+
+/* ---------- Parpadeo pro de los ojos de Lucas ---------- */
+(function(){
+  const lids=document.querySelectorAll('.avatar-wrap .eye-lid');
+  if(!lids.length) return;
+  let stop=false;
+  function doBlink(n,cb){
+    let done=0;
+    lids.forEach(l=>{ l.style.animation='none'; void l.offsetWidth;
+      l.style.animation='lidblink '+(150+Math.round(Math.random()*40))+'ms ease-in-out '+n;
+      l.addEventListener('animationend',function h(){ l.removeEventListener('animationend',h); if(++done>=lids.length && cb) cb(); });
+    });
+  }
+  function loop(){
+    if(stop) return;
+    const twice=Math.random()<0.4;           // ~40% de las veces, doble parpadeo
+    doBlink(twice?2:1, ()=>{});
+    const next=2600+Math.round(Math.random()*1400);   // cada ~2,6–4 s, irregular
+    setTimeout(loop,next);
+  }
+  document.addEventListener('visibilitychange',()=>{ stop=document.hidden; if(!stop) setTimeout(loop,800); });
+  setTimeout(loop,1600);
+})();
