@@ -599,7 +599,6 @@ $('#year').textContent = new Date().getFullYear();
       if (ico) { var ic = ico.cloneNode(true); ic.classList.add('f-ico'); back.appendChild(ic); }
       var h4 = document.createElement('h4'); h4.textContent = tit; back.appendChild(h4);
       var ph = document.createElement('p'); ph.className = 'f-hi'; ph.textContent = hi; back.appendChild(ph);
-      var vv = document.createElement('div'); vv.className = 'f-v'; vv.textContent = '↩ Pulsa para volver'; back.appendChild(vv);
       inner.appendChild(front); inner.appendChild(back); card.appendChild(inner);
       card.classList.add('has-flip');
       card.addEventListener('click', function (e) {
