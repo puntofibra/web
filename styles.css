@@ -625,3 +625,14 @@ body.ej-lock{overflow:hidden}
 .adm-d{color:var(--mut);font-size:.9rem}
 .adm-foot{margin-top:14px;color:var(--mut);font-size:.8rem;text-align:left;opacity:.85}
 #admScan{width:100%;margin-top:4px}
+
+/* ===================== Juegos y Apps ===================== */
+.ja-group{margin-top:30px}
+.ja-group[hidden]{display:none}
+.ja-h{font-family:var(--fh);font-weight:700;font-size:1.2rem;margin:0 0 16px;display:flex;align-items:center;gap:10px;color:#fff}
+.ja-h::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.ja-tag{display:inline-block;font-family:var(--fm);font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;padding:3px 8px;border-radius:999px;margin-right:9px;vertical-align:middle}
+.ja-tag.jg{background:rgba(125,255,90,.16);color:var(--g)}
+.ja-tag.app{background:rgba(46,139,255,.2);color:#6db3ff}
+.ja-tsel select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.4);color:var(--txt);font-family:var(--fh);font-size:1rem}
+.ja-tsel select:focus{border-color:var(--g);box-shadow:0 0 0 4px rgba(125,255,90,.18);outline:none}
