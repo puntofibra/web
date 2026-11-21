@@ -21,10 +21,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=9">
+<link rel="stylesheet" href="styles.css?v=10">
 <script>window.__bip=null;addEventListener('beforeinstallprompt',function(e){e.preventDefault();window.__bip=e;dispatchEvent(new Event('bip-ready'));});</script>
 </head>
 <body>
+<div class="scroll-bar" aria-hidden="true"><i id="scrollBar"></i></div>
 <canvas id="bg" aria-hidden="true"></canvas>
 <div class="cursor-glow" aria-hidden="true"></div>
 <div class="noise" aria-hidden="true"></div>
@@ -46,6 +47,7 @@
   <nav class="nav">
     <a href="#servicios" data-sfx>Servicios</a>
     <a href="#apps" data-sfx>Apps</a>
+    <a href="#software" data-sfx>Software</a>
     <a href="#tv" data-sfx>TV</a>
     <a href="#contacto" data-sfx>Contacto</a>
   </nav>
@@ -234,10 +236,89 @@
   </div>
 </section>
 
+<!-- TECNOLOGÍA -->
+<div class="marquee mq-tech" aria-hidden="true">
+  <div class="track">
+    <span>APPS iPHONE</span><em>&lt;/&gt;</em><span>APPS ANDROID</span><em>&lt;/&gt;</em><span>WEBS A MEDIDA</span><em>&lt;/&gt;</em><span>PANELES DE GESTIÓN</span><em>&lt;/&gt;</em><span>PAGOS ONLINE</span><em>&lt;/&gt;</em><span>CÓDIGOS QR</span><em>&lt;/&gt;</em><span>LLAVES NFC</span><em>&lt;/&gt;</em><span>ASISTENTES CON IA</span><em>&lt;/&gt;</em><span>AUTOMATIZACIÓN</span><em>&lt;/&gt;</em>
+    <span>APPS iPHONE</span><em>&lt;/&gt;</em><span>APPS ANDROID</span><em>&lt;/&gt;</em><span>WEBS A MEDIDA</span><em>&lt;/&gt;</em><span>PANELES DE GESTIÓN</span><em>&lt;/&gt;</em><span>PAGOS ONLINE</span><em>&lt;/&gt;</em><span>CÓDIGOS QR</span><em>&lt;/&gt;</em><span>LLAVES NFC</span><em>&lt;/&gt;</em><span>ASISTENTES CON IA</span><em>&lt;/&gt;</em><span>AUTOMATIZACIÓN</span><em>&lt;/&gt;</em>
+  </div>
+</div>
+
+<!-- SOFTWARE A MEDIDA -->
+<section id="software" class="section soft">
+  <header class="sec-head reveal">
+    <span class="kicker" data-scramble>03 · Software a medida</span>
+    <h2>Programas hechos <span class="grad">solo para tu negocio</span></h2>
+    <p class="lead">Si lo haces a mano, en papel o en una hoja de cálculo, se puede convertir en un programa que trabaje por ti. Estas son algunas de las soluciones que desarrollamos.</p>
+  </header>
+
+  <div class="bento">
+    <article class="bx bx-wide reveal" data-sfx-hover>
+      <div class="bx-ico"><svg viewBox="0 0 48 48"><rect x="5" y="8" width="38" height="28" rx="4"/><path d="M5 16h38M13 24h8M13 30h14M30 23v8M35 26v5"/></svg></div>
+      <h3>Paneles de gestión</h3>
+      <p>Clientes, contratos, stock, fichajes y avisos en una sola pantalla, para ti y tus empleados y desde cualquier dispositivo.</p>
+      <div class="bx-tags"><span>Multiusuario</span><span>Permisos por empleado</span><span>Avisos automáticos</span></div>
+    </article>
+    <article class="bx reveal" data-sfx-hover>
+      <div class="bx-ico"><svg viewBox="0 0 48 48"><rect x="7" y="9" width="34" height="32" rx="4"/><path d="M7 18h34M16 5v8M32 5v8M15 26h6M27 26h6M15 33h6"/></svg></div>
+      <h3>Citas y reservas</h3>
+      <p>Tus clientes reservan solos desde el móvil y tú lo ves todo ordenado.</p>
+    </article>
+    <article class="bx reveal" data-sfx-hover>
+      <div class="bx-ico"><svg viewBox="0 0 48 48"><rect x="5" y="11" width="38" height="26" rx="4"/><path d="M5 20h38M12 30h10"/></svg></div>
+      <h3>Cobros y pagos</h3>
+      <p>Datáfono online, caja, tickets y facturas listos para imprimir.</p>
+    </article>
+    <article class="bx reveal" data-sfx-hover>
+      <div class="bx-ico"><svg viewBox="0 0 48 48"><path d="M24 6l5.3 10.8 11.9 1.7-8.6 8.4 2 11.9L24 33.2l-10.6 5.6 2-11.9-8.6-8.4 11.9-1.7z"/></svg></div>
+      <h3>Fidelización</h3>
+      <p>Tarjetas de puntos, sorteos y promociones para que tus clientes vuelvan.</p>
+    </article>
+    <article class="bx reveal" data-sfx-hover>
+      <div class="bx-ico"><svg viewBox="0 0 48 48"><path d="M8 12h4l5 20h20l4-14H15"/><circle cx="19" cy="39" r="3"/><circle cx="35" cy="39" r="3"/></svg></div>
+      <h3>Tiendas online</h3>
+      <p>Catálogo, pedidos y pagos integrados, con tu marca y a tu manera.</p>
+    </article>
+    <article class="bx bx-wide bx-ia reveal" data-sfx-hover>
+      <div class="bx-ico"><svg viewBox="0 0 48 48"><rect x="10" y="14" width="28" height="22" rx="6"/><path d="M24 14V7M18 25v2M30 25v2M4 24v6M44 24v6M19 41h10"/><circle cx="24" cy="6" r="2"/></svg></div>
+      <h3>Asistentes y automatización</h3>
+      <p>Un asistente que recuerda tareas, avisa de vencimientos y contesta lo repetitivo, para que tu equipo se dedique a vender.</p>
+      <div class="bx-tags"><span>Recordatorios</span><span>Avisos por pantalla</span><span>Informes al instante</span></div>
+    </article>
+  </div>
+
+  <div class="soft-grid">
+    <div class="term reveal" id="term" aria-label="Ejemplo de cómo se crea una app">
+      <div class="term-bar"><i></i><i></i><i></i><span>futurmovil — terminal</span></div>
+      <pre id="termOut" aria-hidden="true"></pre>
+    </div>
+    <div class="vs reveal">
+      <div class="vs-row vs-head"><span></span><b>Plantilla genérica</b><b class="vs-us">A medida con FuturMovil</b></div>
+      <div class="vs-row"><span>Se adapta a tu forma de trabajar</span><i class="no">✕</i><i class="si">✓</i></div>
+      <div class="vs-row"><span>Solo lo que necesitas, sin menús de relleno</span><i class="no">✕</i><i class="si">✓</i></div>
+      <div class="vs-row"><span>Hablas directamente con quien lo programa</span><i class="no">✕</i><i class="si">✓</i></div>
+      <div class="vs-row"><span>Cambios y mejoras cuando tu negocio crece</span><i class="no">✕</i><i class="si">✓</i></div>
+      <div class="vs-row"><span>Instalable en iPhone, Android y ordenador</span><i class="mm">A veces</i><i class="si">✓</i></div>
+      <div class="vs-row"><span>Precio cerrado antes de empezar</span><i class="mm">Cuotas</i><i class="si">✓</i></div>
+    </div>
+  </div>
+
+  <div class="cta-band reveal">
+    <div>
+      <h3>¿Tienes una idea o un problema que resolver?</h3>
+      <p>Cuéntanoslo y te decimos cómo lo haríamos y cuánto costaría. Sin compromiso.</p>
+    </div>
+    <div class="cta-btns">
+      <a class="btn btn-primary magnetic" data-wa="Hola Manu, quiero un programa a medida para mi negocio. Te cuento lo que necesito:" href="#" target="_blank" rel="noopener"><span>Pedir presupuesto</span><svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a class="btn btn-ghost magnetic" href="ejemplos.html"><span>Ver ejemplos reales</span></a>
+    </div>
+  </div>
+</section>
+
 <!-- TV -->
 <section id="tv" class="section tv">
   <header class="sec-head reveal">
-    <span class="kicker">03 · Entretenimiento</span>
+    <span class="kicker">04 · Entretenimiento</span>
     <h2>Que no te pierdas <span class="grad">ni un partido</span>, ni un estreno</h2>
     <p class="lead">Elige lo que te gusta y te montamos el paquete perfecto para tu casa o tu bar.</p>
   </header>
@@ -259,7 +340,7 @@
 <!-- PROCESO -->
 <section class="section process">
   <header class="sec-head reveal">
-    <span class="kicker">04 · Cómo trabajamos</span>
+    <span class="kicker">05 · Cómo trabajamos</span>
     <h2>De la idea a tu móvil <span class="grad">en 4 pasos</span></h2>
   </header>
   <ol class="steps">
@@ -270,12 +351,27 @@
   </ol>
 </section>
 
+<!-- DUDAS -->
+<section id="dudas" class="section faq">
+  <header class="sec-head reveal">
+    <span class="kicker" data-scramble>06 · Dudas habituales</span>
+    <h2>Lo que nos suelen <span class="grad">preguntar</span></h2>
+  </header>
+  <div class="faq-list">
+    <details class="reveal" data-sfx-hover><summary>¿Cuánto cuesta una app o un programa a medida?</summary><p>Depende de lo que necesites. Nos cuentas la idea, la estudiamos y te damos un precio cerrado antes de empezar, sin sorpresas después.</p></details>
+    <details class="reveal" data-sfx-hover><summary>¿Cuánto se tarda en tenerlo funcionando?</summary><p>Según el tamaño del proyecto. Antes de empezar te decimos el plazo, y mientras lo programamos vas viendo el avance en tu propio móvil.</p></details>
+    <details class="reveal" data-sfx-hover><summary>¿Funciona en iPhone, Android y ordenador?</summary><p>Sí. Lo hacemos para que se use desde cualquier dispositivo y se pueda instalar en el móvil como una app más.</p></details>
+    <details class="reveal" data-sfx-hover><summary>¿Y si más adelante quiero cambios o añadir cosas?</summary><p>Sin problema. El programa es tuyo y crece contigo: se le pueden añadir funciones nuevas cuando las necesites.</p></details>
+    <details class="reveal" data-sfx-hover><summary>No sé nada de informática, ¿es un problema?</summary><p>Para nada. Tú nos explicas cómo trabajas con tus palabras y nosotros lo convertimos en un programa fácil de usar. Y después seguimos a tu lado con soporte directo.</p></details>
+  </div>
+</section>
+
 <!-- CONTACTO -->
 <section id="contacto" class="section contact">
   <div class="contact-box reveal">
     <div class="contact-copy">
       <img src="avatar-win.webp?v=4" alt="" class="win-bot" loading="lazy">
-      <span class="kicker">05 · Contacto</span>
+      <span class="kicker">07 · Contacto</span>
       <h2>¿Hablamos?</h2>
       <p class="lead">Escríbenos y te respondemos personalmente. Sin compromiso.</p>
       <a class="wa-big magnetic" data-wa="Hola Manu, vengo de la web de FuturMovil y quiero información." href="#" target="_blank" rel="noopener">
@@ -348,6 +444,6 @@
 
 <div id="toast" class="toast" role="status"></div>
 
-<script src="app.js?v=11"></script>
+<script src="app.js?v=12"></script>
 </body>
 </html>
