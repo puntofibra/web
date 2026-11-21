@@ -441,13 +441,15 @@
     <h3 id="admTit">Modo administrador</h3>
     <p class="tv-sub" id="admSub">Acerca tu llave NFC para entrar.</p>
     <p class="tv-err" id="admErr" role="alert"></p>
-    <button class="btn btn-primary" id="admScan" type="button"><span>Leer llave NFC</span></button>
+    <div id="admQr" style="display:flex;justify-content:center;margin:4px 0 14px" hidden></div>
+    <button class="btn btn-primary" id="admScan" type="button"><span>Abrir lector NFC en este móvil</span></button>
     <div id="admPanel" hidden></div>
   </div>
 </div>
 
 <div id="toast" class="toast" role="status"></div>
 
-<script src="app.js?v=19"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="app.js?v=20"></script>
 </body>
 </html>
