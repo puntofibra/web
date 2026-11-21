@@ -100,10 +100,11 @@
     <form id="ejForm" class="lead-form ej-form" autocomplete="off">
       <input type="hidden" name="id">
       <div class="ej-row">
-        <div class="ej-ico-f"><span class="ej-lbl">Imagen</span>
+        <div class="ej-ico-f"><span class="ej-lbl">Imagen</span><small style="display:block;font-size:.6rem;color:var(--mut);text-align:center;line-height:1.25;margin-top:2px">1280×720 px<br>horizontal 16:9</small>
           <input type="hidden" name="icono">
           <button type="button" id="icoPick" class="ej-ico-pick" title="Elegir ilustración horizontal"><span id="icoPrev"></span></button>
           <button type="button" id="icoQuitar" class="ej-link ej-ico-del" hidden>Quitar</button>
+          <button type="button" id="icoPrompt" class="ej-link" style="font-size:.74rem;margin-top:6px">📋 Prompt</button>
           <input type="file" id="icoFile" accept="image/*" hidden>
         </div>
         <label class="ej-grow"><span>Título</span><input name="titulo" maxlength="80" required placeholder="Ej: Citas para peluquerías"></label>
@@ -130,6 +131,6 @@
 <div id="toast" class="toast" role="status"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="juegos.js?v=2"></script>
+<script src="juegos.js?v=3"></script>
 </body>
 </html>
