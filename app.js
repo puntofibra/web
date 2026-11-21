@@ -525,6 +525,56 @@ $('#year').textContent = new Date().getFullYear();
     });
   }
 
+  // Zona privada 2: 5 toques en «Apps» piden la llave NFC y abren el modo administrador
+  const appsChip = $('#appsChip'), admM = $('#admModal');
+  if (appsChip && admM) {
+    const admSub = $('#admSub', admM), admErr = $('#admErr', admM), admScan = $('#admScan', admM), admPanel = $('#admPanel', admM), admTit = $('#admTit', admM);
+    let golpes = [];
+    const SECRETAS = [
+      ['2757', 'Descarga la app de TV y f\u00fatbol (YouTivi)'],
+      ['0000', 'Descarga Mullvad VPN'],
+      ['7777', 'Abre la web del dat\u00e1fono (pagos)']
+    ];
+    const huellaLlave = async id => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('fm-adm|' + id)))].map(b => b.toString(16).padStart(2, '0')).join('');
+    const mostrarPanel = primera => {
+      admScan.hidden = true; admPanel.hidden = false;
+      admSub.textContent = primera ? 'Llave guardada \u2713 \u2014 ser\u00e1 la que te pida a partir de ahora.' : 'Acceso concedido.';
+      let html = '<div class="adm-h">Claves secretas de la zona privada</div><div class="adm-list">';
+      SECRETAS.forEach(c => { html += '<div class="adm-row"><span class="adm-k">' + c[0] + '</span><span class="adm-d">' + c[1] + '</span></div>'; });
+      html += '</div><p class="adm-foot">Solo t\u00fa ves esto con tu llave. No compartas estas claves.</p>';
+      admPanel.innerHTML = html;
+      try { SFX.play('success'); } catch (e) {}
+    };
+    const leer = async () => {
+      admErr.textContent = '';
+      if (!('NDEFReader' in window)) { admErr.textContent = 'Este dispositivo no admite NFC. Entra desde el m\u00f3vil con Chrome.'; return; }
+      try {
+        const r = new NDEFReader();
+        await r.scan();
+        admSub.textContent = 'Acerca la llave al tel\u00e9fono\u2026';
+        r.onreading = async ev => {
+          const h = await huellaLlave(ev.serialNumber || 'sin-id');
+          const guard = store.get('pfLlaveAdminWeb') || '';
+          if (!guard) { store.set('pfLlaveAdminWeb', h); mostrarPanel(true); }
+          else if (guard === h) { mostrarPanel(false); }
+          else { admErr.textContent = 'Llave no reconocida.'; }
+        };
+        r.onreadingerror = () => { admErr.textContent = 'No se pudo leer la llave. Prueba otra vez.'; };
+      } catch (e) { admErr.textContent = 'No se pudo iniciar el NFC. Prueba otra vez.'; }
+    };
+    appsChip.addEventListener('click', () => {
+      const t = Date.now();
+      golpes = golpes.filter(x => t - x < 3000); golpes.push(t);
+      if (golpes.length < 5) return;
+      golpes = [];
+      admErr.textContent = ''; admPanel.hidden = true; admScan.hidden = false;
+      admTit.textContent = 'Modo administrador';
+      admSub.textContent = ('NDEFReader' in window) ? 'Acerca tu llave NFC para entrar.' : 'Este dispositivo no admite NFC. Entra desde el m\u00f3vil con Chrome.';
+      openModal(admM);
+    });
+    admScan.addEventListener('click', leer);
+  }
+
   // Dudas: solo una abierta a la vez
   $$('.faq details').forEach(d => d.addEventListener('toggle', () => { if (d.open) $$('.faq details').forEach(o => { if (o !== d) o.open = false; }); }));
 
