@@ -295,7 +295,7 @@ function verEjemplo(id, desdeHash) {
   SFX.play('whoosh');
   if (!desdeHash) history.pushState({ ej: id }, '', '#ver=' + encodeURIComponent(id));
 }
-frame.addEventListener('load', () => { if (frame.src !== 'about:blank') $('#vLoad').classList.add('done'); });
+frame.addEventListener('load', () => { if (frame.src !== 'about:blank') { $('#vLoad').classList.add('done'); actualizaInstalar(); } });
 function cerrarVisor() {
   if (viewer.hidden) return;
   viewer.hidden = true; abierto = null;
@@ -303,30 +303,25 @@ function cerrarVisor() {
   document.body.classList.remove('ej-lock');
 }
 $('#vBack').addEventListener('click', () => { if (history.state && history.state.ej) history.back(); else { cerrarVisor(); history.replaceState(null, '', location.pathname); } });
-let pwaPrompt = null;
-addEventListener('beforeinstallprompt', e => { e.preventDefault(); pwaPrompt = e; });
-addEventListener('appinstalled', () => { try { localStorage.setItem('jaInst', '1'); } catch (e) {} const b = $('#vInstall'); if (b) b.style.display = 'none'; });
-async function yaInstalada() {
-  try { if (matchMedia('(display-mode: standalone)').matches || navigator.standalone) return true; } catch (e) {}
-  try { if (localStorage.getItem('jaInst')) return true; } catch (e) {}
-  try { if (navigator.getInstalledRelatedApps) { const a = await navigator.getInstalledRelatedApps(); if (a && a.length) return true; } } catch (e) {}
-  return false;
-}
+function jaInstKey(u) { return 'jaInst:' + u; }
+function jaMarcada(u) { try { return !!localStorage.getItem(jaInstKey(u)); } catch (e) { return false; } }
 async function actualizaInstalar() {
   const b = $('#vInstall'); if (!b) return;
-  b.style.display = '';
-  if (await yaInstalada()) b.style.display = 'none';
-  else if (!pwaPrompt) b.style.display = 'none';
-}
-$('#vInstall').addEventListener('click', async () => {
-  if (pwaPrompt) {
-    pwaPrompt.prompt();
-    const r = await pwaPrompt.userChoice; pwaPrompt = null;
-    if (r && r.outcome === 'accepted') { $('#vInstall').style.display = 'none'; toast('Instalada ✓'); }
-    return;
+  const x = S.lista.find(e => e.id === abierto);
+  const url = x ? x.url : '';
+  let inst = url && jaMarcada(url);
+  if (!inst) {
+    try { const w = frame.contentWindow; if (w && w.navigator && w.navigator.getInstalledRelatedApps) { const a = await w.navigator.getInstalledRelatedApps(); if (a && a.length) inst = true; } } catch (e) {}
   }
+  b.style.display = inst ? 'none' : '';
+}
+$('#vInstall').addEventListener('click', () => {
+  const x = S.lista.find(e => e.id === abierto);
+  const url = x ? x.url : $('#vOpen').href;
+  window.open(url, '_blank');
+  try { localStorage.setItem(jaInstKey(url), '1'); } catch (e) {}
   $('#vInstall').style.display = 'none';
-  toast('Ya tienes esta app instalada');
+  toast('Abriendo la app para instalarla: pulsa «Instalar app»');
 });
 addEventListener('popstate', () => { if (location.hash.startsWith('#ver=')) abrirDesdeHash(); else cerrarVisor(); });
 function abrirDesdeHash() {
