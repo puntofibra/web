@@ -465,6 +465,44 @@ $('#year').textContent = new Date().getFullYear();
     new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { o.disconnect(); corre(); } }, { threshold: .45 }).observe($('#term'));
   }
 
+  // Zona privada: 5 toques rápidos (menos de 3 s) en la etiqueta «TV y fútbol» piden la clave y, si es buena, empieza la descarga
+  const chip = $('#tvChip'), tvM = $('#tvModal');
+  if (chip && tvM) {
+    const APK = 'https://github.com/puntofibra/web/releases/download/apk/YouTivi.apk';
+    const HUELLA = '1cd18edbc4ea9736b814c081f8c8f2fa6c0b4ccdb5871059c4b2b6702e330626';
+    const card = $('.tv-card', tvM), key = $('#tvKey'), err = $('#tvErr');
+    let toques = [], fallos = 0, bloqueo = 0;
+    chip.addEventListener('click', () => {
+      const t = Date.now();
+      toques = toques.filter(x => t - x < 3000); toques.push(t);
+      chip.classList.remove('tap'); void chip.offsetWidth; chip.classList.add('tap');
+      if (toques.length < 5) return;
+      toques = [];
+      card.classList.remove('ok', 'bad'); key.value = ''; err.textContent = '';
+      tvM.hidden = false; SFX.play('pop');
+      setTimeout(() => key.focus(), 80);
+    });
+    const huella = async t => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('fm-tv|' + t)))].map(b => b.toString(16).padStart(2, '0')).join('');
+    $('#tvForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      if (Date.now() < bloqueo) { err.textContent = 'Demasiados intentos. Espera un minuto.'; return; }
+      const v = key.value.trim(); if (!v) { key.focus(); return; }
+      let bien = false;
+      try { bien = (await huella(v)) === HUELLA; } catch (x) {}
+      if (!bien) {
+        fallos++; if (fallos >= 5) { fallos = 0; bloqueo = Date.now() + 60000; }
+        err.textContent = 'Clave incorrecta'; key.value = ''; key.focus();
+        card.classList.remove('bad'); void card.offsetWidth; card.classList.add('bad');
+        return;
+      }
+      fallos = 0; err.textContent = ''; card.classList.add('ok'); SFX.play('success');
+      toast('Descarga iniciada ⬇️', 4000);
+      const a = document.createElement('a'); a.href = APK; a.download = 'YouTivi.apk'; a.rel = 'noopener';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => { tvM.hidden = true; }, 1200);
+    });
+  }
+
   // Dudas: solo una abierta a la vez
   $$('.faq details').forEach(d => d.addEventListener('toggle', () => { if (d.open) $$('.faq details').forEach(o => { if (o !== d) o.open = false; }); }));
 })();
