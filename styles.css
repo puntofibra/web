@@ -654,9 +654,11 @@ body.ej-lock{overflow:hidden}
 .ej-vbar .btn-ghost,.ej-vbar .icon-btn{background:rgba(5,8,10,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1)}
 .ej-vbar .btn,.ej-vbar .icon-btn{box-shadow:0 6px 18px rgba(0,0,0,.45)}
 
-/* Parpadeo pro de los ojos de Lucas (hero) — párpados que cubren todo el globo */
+/* Parpadeo pro de los ojos de Lucas (hero) — párpados con forma de almendra por ojo */
 .avatar-wrap .eye-lid{position:absolute;z-index:2;pointer-events:none;transform-origin:50% 0%;transform:scaleY(0);
-  background:radial-gradient(ellipse at 50% 32%,#1b3833,#061410 72%);border-radius:50%;box-shadow:inset 0 2px 3px rgba(0,0,0,.5)}
-.avatar-wrap .eye-l{left:36.2%;top:24.4%;width:17.6%;height:11.9%}
-.avatar-wrap .eye-r{left:53.3%;top:24.6%;width:16.1%;height:11.6%}
+  background:radial-gradient(ellipse at 50% 30%,#20403a,#05120f 78%)}
+.avatar-wrap .eye-l{left:35.6%;top:23.8%;width:18.8%;height:12.8%;
+  clip-path:polygon(0% 44%,22% 16%,48% 7%,74% 20%,100% 50%,76% 86%,50% 95%,24% 80%)}
+.avatar-wrap .eye-r{left:52.6%;top:23.8%;width:18.3%;height:13.4%;
+  clip-path:polygon(0% 50%,24% 20%,50% 7%,78% 15%,100% 46%,80% 84%,52% 97%,24% 86%)}
 @keyframes lidblink{0%,100%{transform:scaleY(0)}42%,58%{transform:scaleY(1)}}
