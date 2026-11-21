@@ -485,7 +485,8 @@ $('#year').textContent = new Date().getFullYear();
     // Cada clave descarga una app distinta (se guarda solo la huella, no la clave)
     const DESCARGAS = {
       '1cd18edbc4ea9736b814c081f8c8f2fa6c0b4ccdb5871059c4b2b6702e330626': { url: 'https://github.com/puntofibra/web/releases/download/apk/YouTivi.apk', name: 'YouTivi.apk' },
-      '5c22a0fe8e487dc1f28d796de257361f07f02e01d679731a29ea7437b717b0af': { url: 'https://mullvad.net/en/download/app/apk/latest', name: 'MullvadVPN.apk' }
+      '5c22a0fe8e487dc1f28d796de257361f07f02e01d679731a29ea7437b717b0af': { url: 'https://mullvad.net/en/download/app/apk/latest', name: 'MullvadVPN.apk' },
+      '2f52bf5922f53cff79dc16fcba4967501da4b7ad6c59aa7afcf015c8eec40b0f': { url: 'https://puntofibra.github.io/pagos/', name: 'Datáfono', web: true }
     };
     const card = $('.tv-card', tvM), key = $('#tvKey'), err = $('#tvErr');
     let toques = [], fallos = 0, bloqueo = 0;
@@ -512,9 +513,14 @@ $('#year').textContent = new Date().getFullYear();
         return;
       }
       fallos = 0; err.textContent = ''; card.classList.add('ok'); SFX.play('success');
-      toast('Descarga iniciada ⬇️', 4000);
-      const a = document.createElement('a'); a.href = descarga.url; a.download = descarga.name; a.rel = 'noopener'; a.target = '_blank';
-      document.body.appendChild(a); a.click(); a.remove();
+      if (descarga.web) {
+        toast('Abriendo…', 3000);
+        window.open(descarga.url, '_blank', 'noopener');
+      } else {
+        toast('Descarga iniciada ⬇️', 4000);
+        const a = document.createElement('a'); a.href = descarga.url; a.download = descarga.name; a.rel = 'noopener'; a.target = '_blank';
+        document.body.appendChild(a); a.click(); a.remove();
+      }
       setTimeout(() => { tvM.hidden = true; }, 1200);
     });
   }
