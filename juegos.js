@@ -287,6 +287,7 @@ function verEjemplo(id, desdeHash) {
   abierto = id;
   $('#vTitle').innerHTML = (x.icono ? icoHtml(x.icono, 'ej-img-sm') + ' ' : '') + esc(x.titulo);
   $('#vOpen').href = x.url;
+  actualizaInstalar(x);
   $('#vLoad').classList.remove('done');
   frame.src = x.url;
   viewer.hidden = false;
@@ -302,11 +303,30 @@ function cerrarVisor() {
   document.body.classList.remove('ej-lock');
 }
 $('#vBack').addEventListener('click', () => { if (history.state && history.state.ej) history.back(); else { cerrarVisor(); history.replaceState(null, '', location.pathname); } });
-$('#vInstall').addEventListener('click', () => {
-  const x = S.lista.find(e => e.id === abierto);
-  const url = x ? x.url : $('#vOpen').href;
-  window.open(url, '_blank', 'noopener');
-  toast('Ábrela y pulsa «Instalar app» para añadirla a tu móvil');
+let pwaPrompt = null;
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); pwaPrompt = e; });
+addEventListener('appinstalled', () => { try { localStorage.setItem('jaInst', '1'); } catch (e) {} const b = $('#vInstall'); if (b) b.style.display = 'none'; });
+async function yaInstalada() {
+  try { if (matchMedia('(display-mode: standalone)').matches || navigator.standalone) return true; } catch (e) {}
+  try { if (localStorage.getItem('jaInst')) return true; } catch (e) {}
+  try { if (navigator.getInstalledRelatedApps) { const a = await navigator.getInstalledRelatedApps(); if (a && a.length) return true; } } catch (e) {}
+  return false;
+}
+async function actualizaInstalar() {
+  const b = $('#vInstall'); if (!b) return;
+  b.style.display = '';
+  if (await yaInstalada()) b.style.display = 'none';
+  else if (!pwaPrompt) b.style.display = 'none';
+}
+$('#vInstall').addEventListener('click', async () => {
+  if (pwaPrompt) {
+    pwaPrompt.prompt();
+    const r = await pwaPrompt.userChoice; pwaPrompt = null;
+    if (r && r.outcome === 'accepted') { $('#vInstall').style.display = 'none'; toast('Instalada ✓'); }
+    return;
+  }
+  $('#vInstall').style.display = 'none';
+  toast('Ya tienes esta app instalada');
 });
 addEventListener('popstate', () => { if (location.hash.startsWith('#ver=')) abrirDesdeHash(); else cerrarVisor(); });
 function abrirDesdeHash() {
