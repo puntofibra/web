@@ -548,3 +548,35 @@ body.ej-lock{overflow:hidden}
 .faq details[open] summary::after{transform:rotate(135deg);background:var(--g);color:#04140a}
 .faq details p{padding:0 20px 20px;color:var(--mut);animation:faqIn .4s ease}
 @keyframes faqIn{from{opacity:0;transform:translateY(-6px)}}
+
+/* ===================== v11 · Llamas animadas de Lucas ===================== */
+.botfx{position:relative;display:block}
+.botfx>img,.avatar-wrap>.avatar{position:relative;z-index:1;width:100%;display:block}
+.pg-bot.botfx{height:auto}
+.avatar-wrap>.jet{left:69%;bottom:2%;width:42%;height:14%;z-index:0}
+.flames{position:absolute;inset:0;z-index:0;pointer-events:none}
+.fl-port{--ft:84.5%;--fw:9.5%;--fh:16%}
+.fl-cons{--ft:80.5%;--fw:10.5%;--fh:18%}
+.fl-win{--ft:75.5%;--fw:9.5%;--fh:20%}
+.flames i{position:absolute;left:var(--x);top:var(--ft);width:var(--fw);height:var(--fh);margin-left:calc(var(--fw) / -2);transform-origin:50% 0;
+  filter:blur(.7px) drop-shadow(0 0 7px rgba(125,255,90,.95)) drop-shadow(0 6px 16px rgba(61,220,132,.6));animation:flSway 1.7s ease-in-out infinite alternate}
+.flames i::before,.flames i::after{content:"";position:absolute;transform-origin:50% 0;
+  clip-path:polygon(6% 0,94% 0,100% 16%,90% 46%,68% 78%,50% 100%,32% 78%,10% 46%,0 16%)}
+.flames i::before{inset:0;background:linear-gradient(180deg,#f2fff0 0%,#b6ff7a 14%,#55f06a 38%,#19d98a 62%,rgba(20,200,150,.5) 82%,transparent 100%);animation:flA .46s ease-in-out infinite alternate}
+.flames i::after{inset:0 24% 42%;background:linear-gradient(180deg,#fff 0%,#eaffd8 45%,rgba(200,255,150,.6) 80%,transparent);animation:flB .31s ease-in-out infinite alternate}
+.flames i:nth-of-type(2){animation-duration:1.3s;animation-delay:-.4s}
+.flames i:nth-of-type(2)::before{animation-duration:.38s;animation-delay:-.12s}
+.flames i:nth-of-type(2)::after{animation-duration:.27s}
+.flames i:nth-of-type(3){animation-duration:2s;animation-delay:-.9s}
+.flames i:nth-of-type(3)::before{animation-duration:.53s;animation-delay:-.25s}
+.flames i:nth-of-type(3)::after{animation-duration:.35s;animation-delay:-.1s}
+@keyframes flA{0%{transform:scale(1,.86)}22%{transform:scale(.9,1.12) skewX(3deg)}48%{transform:scale(1.06,.94) skewX(-3deg)}74%{transform:scale(.93,1.22) skewX(2deg)}100%{transform:scale(1.02,1.05) skewX(-2deg)}}
+@keyframes flB{0%{transform:scale(1,.8)}35%{transform:scale(.86,1.2)}70%{transform:scale(1.08,.92)}100%{transform:scale(.94,1.14)}}
+@keyframes flSway{from{transform:rotate(-2.2deg)}to{transform:rotate(2.2deg)}}
+/* chispas que se desprenden */
+.flames b{position:absolute;left:var(--x);top:calc(var(--ft) + var(--fh) * .55);width:4px;height:4px;margin-left:-2px;border-radius:50%;background:#d6ffb0;box-shadow:0 0 8px 2px rgba(125,255,90,.9);opacity:0;animation:flSpark 1.15s linear infinite}
+.flames b:nth-of-type(2){animation-duration:.9s;animation-delay:-.35s;width:3px;height:3px}
+.flames b:nth-of-type(3){animation-duration:1.4s;animation-delay:-.8s}
+@keyframes flSpark{0%{opacity:0;transform:translate(0,0) scale(1)}12%{opacity:1}100%{opacity:0;transform:translate(6px,calc(var(--sp,46px))) scale(.2)}}
+.fl-port{--sp:70px}.fl-cons{--sp:26px}.fl-win{--sp:30px}
+@media (prefers-reduced-motion:reduce){.flames b{display:none}}
