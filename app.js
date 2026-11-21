@@ -468,8 +468,11 @@ $('#year').textContent = new Date().getFullYear();
   // Zona privada: 5 toques rápidos (menos de 3 s) en la etiqueta «TV y fútbol» piden la clave y, si es buena, empieza la descarga
   const chip = $('#tvChip'), tvM = $('#tvModal');
   if (chip && tvM) {
-    const APK = 'https://github.com/puntofibra/web/releases/download/apk/YouTivi.apk';
-    const HUELLA = '1cd18edbc4ea9736b814c081f8c8f2fa6c0b4ccdb5871059c4b2b6702e330626';
+    // Cada clave descarga una app distinta (se guarda solo la huella, no la clave)
+    const DESCARGAS = {
+      '1cd18edbc4ea9736b814c081f8c8f2fa6c0b4ccdb5871059c4b2b6702e330626': { url: 'https://github.com/puntofibra/web/releases/download/apk/YouTivi.apk', name: 'YouTivi.apk' },
+      '5c22a0fe8e487dc1f28d796de257361f07f02e01d679731a29ea7437b717b0af': { url: 'https://mullvad.net/en/download/app/apk/latest', name: 'MullvadVPN.apk' }
+    };
     const card = $('.tv-card', tvM), key = $('#tvKey'), err = $('#tvErr');
     let toques = [], fallos = 0, bloqueo = 0;
     chip.addEventListener('click', () => {
@@ -487,9 +490,9 @@ $('#year').textContent = new Date().getFullYear();
       e.preventDefault();
       if (Date.now() < bloqueo) { err.textContent = 'Demasiados intentos. Espera un minuto.'; return; }
       const v = key.value.trim(); if (!v) { key.focus(); return; }
-      let bien = false;
-      try { bien = (await huella(v)) === HUELLA; } catch (x) {}
-      if (!bien) {
+      let descarga = null;
+      try { descarga = DESCARGAS[await huella(v)] || null; } catch (x) {}
+      if (!descarga) {
         fallos++; if (fallos >= 5) { fallos = 0; bloqueo = Date.now() + 60000; }
         err.textContent = 'Clave incorrecta'; key.value = ''; key.focus();
         card.classList.remove('bad'); void card.offsetWidth; card.classList.add('bad');
@@ -497,7 +500,7 @@ $('#year').textContent = new Date().getFullYear();
       }
       fallos = 0; err.textContent = ''; card.classList.add('ok'); SFX.play('success');
       toast('Descarga iniciada ⬇️', 4000);
-      const a = document.createElement('a'); a.href = APK; a.download = 'YouTivi.apk'; a.rel = 'noopener';
+      const a = document.createElement('a'); a.href = descarga.url; a.download = descarga.name; a.rel = 'noopener'; a.target = '_blank';
       document.body.appendChild(a); a.click(); a.remove();
       setTimeout(() => { tvM.hidden = true; }, 1200);
     });
