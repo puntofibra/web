@@ -525,54 +525,63 @@ $('#year').textContent = new Date().getFullYear();
     });
   }
 
-  // Zona privada 2: 5 toques en «Apps» piden la llave NFC y abren el modo administrador
+  // Zona privada 2: 5 toques en «Apps» → modo administrador. En el PC sale un QR; lo escaneas con el móvil y acercas tu llave NFC.
   const appsChip = $('#appsChip'), admM = $('#admModal');
   if (appsChip && admM) {
-    const admSub = $('#admSub', admM), admErr = $('#admErr', admM), admScan = $('#admScan', admM), admPanel = $('#admPanel', admM), admTit = $('#admTit', admM);
-    let golpes = [];
+    const admSub = $('#admSub', admM), admErr = $('#admErr', admM), admScan = $('#admScan', admM), admPanel = $('#admPanel', admM), admTit = $('#admTit', admM), admQr = $('#admQr', admM);
+    let golpes = [], sesion = null, pollTimer = null;
     const SECRETAS = [
-      ['2757', 'Descarga la app de TV y f\u00fatbol (YouTivi)'],
+      ['2757', 'Descarga la app de TV y fútbol (YouTivi)'],
       ['0000', 'Descarga Mullvad VPN'],
-      ['7777', 'Abre la web del dat\u00e1fono (pagos)']
+      ['7777', 'Abre la web del datáfono (pagos)']
     ];
-    const huellaLlave = async id => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('fm-adm|' + id)))].map(b => b.toString(16).padStart(2, '0')).join('');
-    const mostrarPanel = primera => {
-      admScan.hidden = true; admPanel.hidden = false;
-      admSub.textContent = primera ? 'Llave guardada \u2713 \u2014 ser\u00e1 la que te pida a partir de ahora.' : 'Acceso concedido.';
+    const mostrarPanel = () => {
+      admScan.hidden = true; if (admQr) admQr.hidden = true;
+      admPanel.hidden = false;
+      admSub.textContent = 'Acceso concedido.';
       let html = '<div class="adm-h">Claves secretas de la zona privada</div><div class="adm-list">';
       SECRETAS.forEach(c => { html += '<div class="adm-row"><span class="adm-k">' + c[0] + '</span><span class="adm-d">' + c[1] + '</span></div>'; });
-      html += '</div><p class="adm-foot">Solo t\u00fa ves esto con tu llave. No compartas estas claves.</p>';
+      html += '</div><p class="adm-foot">Solo tú ves esto con tu llave. No compartas estas claves.</p>';
       admPanel.innerHTML = html;
       try { SFX.play('success'); } catch (e) {}
     };
-    const leer = async () => {
-      admErr.textContent = '';
-      if (!('NDEFReader' in window)) { admErr.textContent = 'Este dispositivo no admite NFC. Entra desde el m\u00f3vil con Chrome.'; return; }
+    const parar = () => { if (pollTimer) { clearTimeout(pollTimer); pollTimer = null; } };
+    const sondear = async () => {
+      if (admM.hidden || !sesion) return;
       try {
-        const r = new NDEFReader();
-        await r.scan();
-        admSub.textContent = 'Acerca la llave al tel\u00e9fono\u2026';
-        r.onreading = async ev => {
-          const h = await huellaLlave(ev.serialNumber || 'sin-id');
-          const guard = store.get('pfLlaveAdminWeb') || '';
-          if (!guard) { store.set('pfLlaveAdminWeb', h); mostrarPanel(true); }
-          else if (guard === h) { mostrarPanel(false); }
-          else { admErr.textContent = 'Llave no reconocida.'; }
-        };
-        r.onreadingerror = () => { admErr.textContent = 'No se pudo leer la llave. Prueba otra vez.'; };
-      } catch (e) { admErr.textContent = 'No se pudo iniciar el NFC. Prueba otra vez.'; }
+        const r = await jsonp(API, { action: 'llaveEstado', codigo: sesion.codigo });
+        if (admM.hidden) return;
+        if (r && r.estado === 'ok') { parar(); mostrarPanel(); return; }
+        if (r && r.estado === 'denegado') { parar(); admErr.textContent = 'Llave no autorizada.'; return; }
+        if (r && r.estado === 'caducado') { parar(); admErr.textContent = 'El código ha caducado. Cierra y vuelve a abrir.'; return; }
+      } catch (e) {}
+      pollTimer = setTimeout(sondear, 1600);
+    };
+    const iniciar = async () => {
+      parar(); sesion = null;
+      admErr.textContent = ''; admPanel.hidden = true; admScan.hidden = true;
+      admTit.textContent = 'Modo administrador';
+      admSub.textContent = 'Preparando acceso…';
+      if (admQr) { admQr.hidden = true; admQr.innerHTML = ''; }
+      let ses;
+      try { ses = await jsonp(API, { action: 'llaveSesion' }); } catch (e) { admSub.textContent = ''; admErr.textContent = 'No se pudo preparar el acceso. Prueba otra vez.'; return; }
+      if (admM.hidden) return;
+      sesion = ses;
+      admSub.textContent = 'Escanea el QR con tu móvil (Android con NFC) y acerca tu llave.';
+      if (admQr && window.QRCode) { admQr.hidden = false; try { new QRCode(admQr, { text: ses.url, width: 190, height: 190, correctLevel: QRCode.CorrectLevel.M }); } catch (e) {} }
+      admScan.hidden = false;
+      sondear();
     };
     appsChip.addEventListener('click', () => {
       const t = Date.now();
       golpes = golpes.filter(x => t - x < 3000); golpes.push(t);
       if (golpes.length < 5) return;
       golpes = [];
-      admErr.textContent = ''; admPanel.hidden = true; admScan.hidden = false;
-      admTit.textContent = 'Modo administrador';
-      admSub.textContent = ('NDEFReader' in window) ? 'Acerca tu llave NFC para entrar.' : 'Este dispositivo no admite NFC. Entra desde el m\u00f3vil con Chrome.';
       openModal(admM);
+      iniciar();
     });
-    admScan.addEventListener('click', leer);
+    admScan.addEventListener('click', () => { if (sesion) window.open(sesion.url, '_blank', 'noopener'); });
+    admM.addEventListener('click', e => { if (e.target === admM || e.target.closest('.modal-x')) parar(); });
   }
 
   // Dudas: solo una abierta a la vez
