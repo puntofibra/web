@@ -100,7 +100,7 @@ document.addEventListener('click', e => {
 });
 if (!isTouch) {
   document.addEventListener('pointerover', e => {
-    const el = e.target.closest('a,button,[data-sfx-hover],.plat');
+    const el = e.target.closest('a,button,[data-sfx-hover]');
     if (el && !el.contains(e.relatedTarget)) SFX.play('hover');
   });
 }
@@ -268,7 +268,21 @@ setInterval(() => {
 })();
 
 /* ---------- PWA: instalar ---------- */
-if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+if ('serviceWorker' in navigator) {
+  // La web se actualiza sola: si hay versión nueva, se recarga sin que el usuario haga nada
+  let yaRecarga = false;
+  if (navigator.serviceWorker.controller) {
+    navigator.serviceWorker.addEventListener('controllerchange', () => { if (!yaRecarga) { yaRecarga = true; location.reload(); } });
+  }
+  addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      const mirar = () => { try { reg.update(); } catch (e) {} };
+      setInterval(mirar, 60000);
+      addEventListener('focus', mirar);
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) mirar(); });
+    }).catch(() => {});
+  });
+}
 const ua = navigator.userAgent;
 const isIOS = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const isSafari = isIOS && !/crios|fxios|edgios|opios|gsa\//i.test(ua);
@@ -507,5 +521,39 @@ $('#year').textContent = new Date().getFullYear();
 
   // Dudas: solo una abierta a la vez
   $$('.faq details').forEach(d => d.addEventListener('toggle', () => { if (d.open) $$('.faq details').forEach(o => { if (o !== d) o.open = false; }); }));
+
+  /* ---------- Tarjetas que giran al pulsar ---------- */
+  (function () {
+    var DET = {
+      'fibra óptica': 'Fibra simétrica y estable para 4K, juego y teletrabajo.',
+      'líneas móviles': 'Muchos gigas, llamadas ilimitadas y tu número de siempre.',
+      'televisión': 'Todo el fútbol, deportes, cine, series e infantil en un sitio.',
+      'apps y webs': 'iPhone, Android y web a tu medida, a precio competitivo.'
+    };
+    $$('.card, .bx').forEach(function (card) {
+      if (card.querySelector('.flip3d')) return;
+      var front = document.createElement('div'); front.className = 'f-front';
+      [].slice.call(card.children).forEach(function (h) { if (!(h.classList && h.classList.contains('badge'))) front.appendChild(h); });
+      var tit = ((front.querySelector('h3') || {}).textContent || '').trim();
+      var hi = DET[tit.toLowerCase()] || '';
+      if (!hi) { var li = front.querySelector('ul li, .bx-tags span'); if (li) hi = li.textContent; else { var pp = front.querySelector('p'); hi = pp ? pp.textContent.split('. ')[0].replace(/\.$/, '') + '.' : ''; } }
+      var ico = front.querySelector('.card-ico, .bx-ico');
+      var inner = document.createElement('div'); inner.className = 'flip3d';
+      var back = document.createElement('div'); back.className = 'f-back';
+      if (ico) { var ic = ico.cloneNode(true); ic.classList.add('f-ico'); back.appendChild(ic); }
+      var h4 = document.createElement('h4'); h4.textContent = tit; back.appendChild(h4);
+      var ph = document.createElement('p'); ph.className = 'f-hi'; ph.textContent = hi; back.appendChild(ph);
+      var vv = document.createElement('div'); vv.className = 'f-v'; vv.textContent = '↩ Pulsa para volver'; back.appendChild(vv);
+      inner.appendChild(front); inner.appendChild(back); card.appendChild(inner);
+      card.classList.add('has-flip');
+      card.addEventListener('click', function (e) {
+        if (e.target.closest('a, button')) return;
+        var era = card.classList.contains('flipped');
+        $$('.has-flip.flipped').forEach(function (c) { c.classList.remove('flipped'); });
+        if (!era) { card.classList.add('flipped'); try { SFX.play('click'); } catch (x) {} }
+      });
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') $$('.has-flip.flipped').forEach(function (c) { c.classList.remove('flipped'); }); });
+  })();
 })();
 })();
